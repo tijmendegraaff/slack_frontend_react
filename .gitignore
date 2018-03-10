@@ -4,3 +4,4 @@ public/dist/
 .env.development
 .env.production
 yarn-error.log
+.vscode
