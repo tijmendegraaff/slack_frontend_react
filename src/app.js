@@ -5,10 +5,11 @@ import 'normalize.css/normalize.css'
 
 import './styles/styles.scss'
 import client from './apollo'
+import Routes from './routes'
 
 const App = (
     <ApolloProvider client={client}>
-        <div>hello</div>
+        <Routes />
     </ApolloProvider>
 )
 
