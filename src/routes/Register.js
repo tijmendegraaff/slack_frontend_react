@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import { Container, Header, Input, Button } from 'semantic-ui-react'
+import { Container, Header, Input, Button, Message } from 'semantic-ui-react'
 import { graphql } from 'react-apollo'
 import PropTypes from 'prop-types'
+import _ from 'lodash'
 import createUserMutation from '../graphql/mutations/createUserMutation'
-
-// import { Link } from 'react-router-dom'
 
 class RegisterPage extends Component {
     constructor(props) {
@@ -15,7 +14,7 @@ class RegisterPage extends Component {
             userName: '',
             email: '',
             password: '',
-            confirmPassword: '',
+            confirmPassword: ''
         }
         this.onChange = this.onChange.bind(this)
         this.onSumbit = this.onSumbit.bind(this)
@@ -23,79 +22,123 @@ class RegisterPage extends Component {
 
     onChange(e) {
         const { name, value } = e.target
-        this.setState({ [name]: value })
+        this.setState({
+            [name]: value
+        })
     }
 
     async onSumbit() {
+        const initialerrorsState = {
+            firstNameError: '',
+            lastNameError: '',
+            userNameError: '',
+            emailError: '',
+            passwordError: '',
+            confirmPasswordError: ''
+        }
+        this.setState(initialerrorsState)
         const {
-            firstName, lastName, userName, email, password,
+            firstName, lastName, userName, email, password
         } = this.state
-        const res = await this.props.mutate({
-            variables: {
-                input: {
-                    firstName,
-                    lastName,
-                    userName,
-                    email,
-                    password,
-                },
-            },
-        })
-        console.log(res)
+        if (this.state.password === this.state.confirmPassword) {
+            await this.props
+                .mutate({
+                    variables: {
+                        input: {
+                            firstName,
+                            lastName,
+                            userName,
+                            email,
+                            password
+                        }
+                    }
+                })
+                .then(() => {
+                    this.props.history.push('/')
+                })
+                .catch((err) => {
+                    const errors = {}
+                    err.graphQLErrors.forEach(({ key, message }) => {
+                        errors[`${_.camelCase(key)}Error`] = message[0]
+                    })
+                    this.setState(errors)
+                })
+        } else {
+            this.setState({
+                passwordError: "passwords don't match",
+                confirmPasswordError: "passwords don't match"
+            })
+        }
     }
 
     render() {
         const {
-            firstName, lastName, userName, email, password, confirmPassword,
+            firstName,
+            firstNameError,
+            lastName,
+            lastNameError,
+            userName,
+            userNameError,
+            email,
+            emailError,
+            password,
+            passwordError,
+            confirmPassword,
+            confirmPasswordError
         } = this.state
         return (
             <Container text>
                 <br />
-                <Header as="h2">Register</Header>
-                <br />
+                <Header as="h2"> Register </Header> <br />
                 <Input
                     name="firstName"
+                    error={!!firstNameError}
                     onChange={this.onChange}
                     placeholder="First Name"
                     value={firstName}
                     fluid
                 />
-                <br />
+                {firstNameError ? <Message size="tiny">{firstNameError}</Message> : <br />}
                 <Input
                     name="lastName"
+                    error={!!lastNameError}
                     onChange={this.onChange}
                     placeholder="Last Name"
                     value={lastName}
                     fluid
                 />
-                <br />
+                {lastNameError ? <Message size="tiny">{lastNameError}</Message> : <br />}
                 <Input
                     name="userName"
+                    error={!!userNameError}
                     onChange={this.onChange}
                     placeholder="User Name"
                     value={userName}
                     fluid
                 />
-                <br />
+                {userNameError ? <Message size="tiny">{userNameError}</Message> : <br />}
                 <Input
                     name="email"
+                    error={!!emailError}
                     onChange={this.onChange}
                     placeholder="Email"
                     value={email}
                     fluid
                 />
-                <br />
+                {emailError ? <Message size="tiny">{emailError}</Message> : <br />}
                 <Input
                     name="password"
+                    error={!!passwordError}
                     onChange={this.onChange}
                     placeholder="Password"
                     type="password"
                     value={password}
                     fluid
                 />
-                <br />
+                {passwordError ? <Message size="tiny">{passwordError}</Message> : <br />}
                 <Input
                     name="confirmPassword"
+                    error={!!confirmPasswordError}
                     onChange={this.onChange}
                     placeholder="Confirm Password"
                     type="password"
@@ -104,12 +147,12 @@ class RegisterPage extends Component {
                 />
                 <br />
                 <Button onClick={this.onSumbit} size="big">
-                    Register
-                </Button>
-                <Button size="big" basic>
-                    Login
-                </Button>
-                <Header as="h3">Forgot your password? Click here</Header>
+                    Register{' '}
+                </Button>{' '}
+                <Button onClick={() => this.props.history.push('/login')} size="big" basic>
+                    Login{' '}
+                </Button>{' '}
+                <Header as="h3"> Forgot your password ? Click here </Header>{' '}
             </Container>
         )
     }
@@ -117,6 +160,7 @@ class RegisterPage extends Component {
 
 RegisterPage.propTypes = {
     mutate: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired
 }
 
 export default graphql(createUserMutation)(RegisterPage)
