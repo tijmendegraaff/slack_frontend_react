@@ -1,5 +1,12 @@
 import React from 'react'
+import { graphql } from 'react-apollo'
+import PropTypes from 'prop-types'
+import usersQuery from '../queries/usersQuery'
 
-const Home = () => <div>Hello</div>
+const Home = ({ data: { loading, users } }) =>
+    (loading ? <div>Loading....</div> : users.map(user => <div key={user.id}>{user.userName}</div>))
 
-export default Home
+Home.propTypes = {
+    data: PropTypes.object.isRequired,
+}
+export default graphql(usersQuery)(Home)
