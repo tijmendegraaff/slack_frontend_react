@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { Container, Header, Button, Message, Form } from 'semantic-ui-react'
-// import { graphql } from 'react-apollo'
+import { graphql } from 'react-apollo'
 import PropTypes from 'prop-types'
+
+import createSessionMutation from '../graphql/mutations/createSessionMutation'
 
 class LoginPage extends Component {
     constructor(props) {
@@ -13,6 +15,7 @@ class LoginPage extends Component {
             passwordError: ''
         }
         this.onChange = this.onChange.bind(this)
+        this.onSumbit = this.onSumbit.bind(this)
     }
 
     onChange(e) {
@@ -23,9 +26,23 @@ class LoginPage extends Component {
         console.log(this.state)
     }
 
-    onSumbit(e) {
-        e.preventDefault()
-        console.log(this.state)
+    async onSumbit() {
+        const { email, password } = this.state
+        await this.props
+            .mutate({
+                variables: {
+                    input: {
+                        email,
+                        password
+                    }
+                }
+            })
+            .then(() => {
+                this.props.history.push('/')
+            })
+            .catch((err) => {
+                console.log(err)
+            })
     }
 
     render() {
@@ -50,6 +67,7 @@ class LoginPage extends Component {
                     <Form.Field error={!!passwordError}>
                         <label>Password</label>
                         <input
+                            type="password"
                             placeholder="password"
                             name="password"
                             onChange={this.onChange}
@@ -76,7 +94,8 @@ class LoginPage extends Component {
 }
 
 LoginPage.propTypes = {
-    history: PropTypes.object.isRequired
+    history: PropTypes.object.isRequired,
+    mutate: PropTypes.func.isRequired
 }
 
-export default LoginPage
+export default graphql(createSessionMutation)(LoginPage)
