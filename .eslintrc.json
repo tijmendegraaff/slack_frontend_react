@@ -21,6 +21,7 @@
         "XMLHttpRequest": false
     },
     "rules": {
+        "jsx-a11y/label-has-for": "off",
         "prefer-destructuring": "off",
         "comma-dangle": "off",
         "indent": ["error", 4],
