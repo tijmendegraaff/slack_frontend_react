@@ -2,6 +2,7 @@
     "extends": "airbnb",
     "plugins": ["react", "jsx-a11y", "import"],
     "globals": {
+        "localStorage": true,
         "document": true,
         "window": true,
         "Roles": false,

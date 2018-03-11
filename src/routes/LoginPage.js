@@ -23,7 +23,6 @@ class LoginPage extends Component {
         this.setState({
             [name]: value
         })
-        console.log(this.state)
     }
 
     async onSumbit() {
@@ -37,11 +36,16 @@ class LoginPage extends Component {
                     }
                 }
             })
-            .then(() => {
+            .then((res) => {
+                localStorage.setItem('token', res.data.createSession.token)
                 this.props.history.push('/')
             })
             .catch((err) => {
-                console.log(err)
+                const { message } = err.graphQLErrors[0]
+                this.setState({
+                    emailError: message,
+                    passwordError: message
+                })
             })
     }
 
@@ -63,7 +67,6 @@ class LoginPage extends Component {
                             value={email}
                         />
                     </Form.Field>
-                    {emailError ? <Message size="tiny">{emailError}</Message> : null}
                     <Form.Field error={!!passwordError}>
                         <label>Password</label>
                         <input
