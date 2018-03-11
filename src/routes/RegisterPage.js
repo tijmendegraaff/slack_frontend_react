@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Header, Input, Button, Message, Form } from 'semantic-ui-react'
+import { Container, Header, Button, Message, Form } from 'semantic-ui-react'
 import { graphql } from 'react-apollo'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
@@ -61,12 +61,12 @@ class RegisterPage extends Component {
                     err.graphQLErrors.forEach(({ key, message }) => {
                         errors[`${_.camelCase(key)}Error`] = message[0]
                     })
+                    this.setState({ password: '', confirmPassword: '' })
                     this.setState(errors)
                 })
         } else {
             this.setState({
-                passwordError: "passwords don't match",
-                confirmPasswordError: "passwords don't match"
+                passwordError: "passwords don't match"
             })
         }
     }
@@ -83,77 +83,89 @@ class RegisterPage extends Component {
             emailError,
             password,
             passwordError,
-            confirmPassword,
-            confirmPasswordError
+            confirmPassword
         } = this.state
         return (
             <Container text>
                 <Form>
                     <br />
                     <Header as="h2"> Register </Header> <br />
-                    <Input
-                        name="firstName"
-                        error={!!firstNameError}
-                        onChange={this.onChange}
-                        placeholder="First Name"
-                        value={firstName}
-                        fluid
-                    />
-                    {firstNameError ? <Message size="tiny">{firstNameError}</Message> : <br />}
-                    <Input
-                        name="lastName"
-                        error={!!lastNameError}
-                        onChange={this.onChange}
-                        placeholder="Last Name"
-                        value={lastName}
-                        fluid
-                    />
-                    {lastNameError ? <Message size="tiny">{lastNameError}</Message> : <br />}
-                    <Input
-                        name="userName"
-                        error={!!userNameError}
-                        onChange={this.onChange}
-                        placeholder="User Name"
-                        value={userName}
-                        fluid
-                    />
-                    {userNameError ? <Message size="tiny">{userNameError}</Message> : <br />}
-                    <Input
-                        name="email"
-                        error={!!emailError}
-                        onChange={this.onChange}
-                        placeholder="Email"
-                        value={email}
-                        fluid
-                    />
-                    {emailError ? <Message size="tiny">{emailError}</Message> : <br />}
-                    <Input
-                        name="password"
-                        error={!!passwordError}
-                        onChange={this.onChange}
-                        placeholder="Password"
-                        type="password"
-                        value={password}
-                        fluid
-                    />
-                    {passwordError ? <Message size="tiny">{passwordError}</Message> : <br />}
-                    <Input
-                        name="confirmPassword"
-                        error={!!confirmPasswordError}
-                        onChange={this.onChange}
-                        placeholder="Confirm Password"
-                        type="password"
-                        value={confirmPassword}
-                        fluid
-                    />
-                    <br />
-                    <Button onClick={this.onSumbit} size="big">
-                        Register{' '}
-                    </Button>{' '}
-                    <Button onClick={() => this.props.history.push('/login')} size="big" basic>
-                        Login{' '}
-                    </Button>{' '}
-                    <Header as="h3"> Forgot your password ? Click here </Header>{' '}
+                    <Form.Group unstackable widths={2}>
+                        <Form.Field error={!!firstNameError}>
+                            <label>First Name</label>
+                            <input
+                                name="firstName"
+                                onChange={this.onChange}
+                                placeholder="First Name"
+                                value={firstName}
+                            />
+                            {firstNameError && <Message size="tiny">{firstNameError}</Message>}
+                        </Form.Field>
+
+                        <Form.Field error={!!lastNameError}>
+                            <label>Last Name</label>
+                            <input
+                                name="lastName"
+                                onChange={this.onChange}
+                                placeholder="Last Name"
+                                value={lastName}
+                            />
+                            {lastNameError && <Message size="tiny">{lastNameError}</Message>}
+                        </Form.Field>
+                    </Form.Group>
+                    <Form.Field error={!!userNameError}>
+                        <label>User Name</label>
+                        <input
+                            name="userName"
+                            onChange={this.onChange}
+                            placeholder="user Name"
+                            value={userName}
+                        />
+                    </Form.Field>
+                    {userNameError && <Message size="tiny">{userNameError}</Message>}
+                    <Form.Field error={!!emailError}>
+                        <label>Email</label>
+                        <input
+                            name="email"
+                            onChange={this.onChange}
+                            placeholder="email"
+                            value={email}
+                        />
+                    </Form.Field>
+                    {emailError && <Message size="tiny">{emailError}</Message>}
+                    <Form.Field error={!!passwordError}>
+                        <label>Password</label>
+                        <input
+                            type="password"
+                            name="password"
+                            onChange={this.onChange}
+                            placeholder="password"
+                            value={password}
+                        />
+                    </Form.Field>
+                    {passwordError && <Message size="tiny">{passwordError}</Message>}
+                    <Form.Field error={!!passwordError}>
+                        <label>Confirm Password</label>
+                        <input
+                            type="password"
+                            name="confirmPassword"
+                            onChange={this.onChange}
+                            placeholder="password"
+                            value={confirmPassword}
+                        />
+                    </Form.Field>
+                    <Button type="button" onClick={this.onSumbit} size="big">
+                        Register
+                    </Button>
+                    <Button
+                        type="button"
+                        onClick={() => this.props.history.push('/login')}
+                        size="big"
+                        basic
+                    >
+                        Login
+                    </Button>
+                    <Header as="h3"> Forgot your password ? Click here </Header>
                 </Form>
             </Container>
         )
