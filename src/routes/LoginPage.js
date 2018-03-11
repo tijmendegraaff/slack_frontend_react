@@ -57,10 +57,15 @@ class LoginPage extends Component {
                         />
                     </Form.Field>
                     {passwordError ? <Message size="tiny">{passwordError}</Message> : null}
-                    <Button onClick={this.onSumbit} size="big">
+                    <Button type="button" onClick={this.onSumbit} size="big">
                         Login{' '}
                     </Button>{' '}
-                    <Button onClick={() => this.props.history.push('/register')} size="big" basic>
+                    <Button
+                        type="button"
+                        onClick={() => this.props.history.push('/register')}
+                        size="big"
+                        basic
+                    >
                         Register{' '}
                     </Button>{' '}
                     <Header as="h3"> Forgot your password ? Click here </Header>{' '}
