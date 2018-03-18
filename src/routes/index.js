@@ -50,6 +50,14 @@ export default () => (
 )
 
 PrivateRoute.propTypes = {
-    location: PropTypes.object.isRequired,
-    component: PropTypes.object.isRequired
+    location: PropTypes.shape({
+        pathname: PropTypes.string.isRequired
+    }),
+    component: PropTypes.func.isRequired
+}
+
+PrivateRoute.defaultProps = {
+    location: {
+        pathname: ''
+    }
 }

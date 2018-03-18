@@ -1,2 +1,10 @@
-@import './base/settings';
-@import './base/base';
+@import "./base/settings";
+@import "./base/base";
+
+@import "./components/app-wrapper";
+@import "./components/channels";
+@import "./components/header";
+@import "./components/message-input";
+@import "./components/teams";
+
+@import "./containers/message-container";
