@@ -18,9 +18,7 @@ class DashboardPage extends Component {
                 <Teams
                     teams={[{ id: 1, name: 'Le Wagon' }, { id: 2, name: 'Bacon' }]}
                     addTeam={this.addTeam}
-                >
-                    Teams
-                </Teams>
+                />
                 <Channels
                     teamName="Teamname"
                     username="Username"

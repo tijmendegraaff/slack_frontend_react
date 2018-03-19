@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+// eslint-disable-next-line
 const team = ({ id, name }) => (
     <li key={`team-${id}`} className="team-list-item">
         {name.charAt(0).toUpperCase()}
@@ -19,7 +20,8 @@ const Teams = ({ teams, addTeam }) => (
 )
 
 Teams.propTypes = {
-    teams: PropTypes.array.isRequired
+    teams: PropTypes.array.isRequired,
+    addTeam: PropTypes.func.isRequired
 }
 
 export default Teams
