@@ -1,7 +1,7 @@
 import AppWrapper from './AppWrapper'
 import Channels from './Channels'
-import Header from './Header'
+import HeaderWrapper from './HeaderWrapper'
 import Teams from './Teams'
-import MessageInput from './MessageInput'
+import SendMessage from './SendMessage'
 
-export { AppWrapper, Channels, Header, Teams, MessageInput }
+export { AppWrapper, Channels, HeaderWrapper, Teams, SendMessage }
