@@ -6,11 +6,21 @@ class DashboardPage extends Component {
     constructor(props) {
         super(props)
         this.state = {}
+        this.addTeam = this.addTeam.bind(this)
+    }
+
+    addTeam() {
+        console.log('add a team')
     }
     render() {
         return (
             <AppWrapper>
-                <Teams teams={[{ id: 1, name: 'Le Wagon' }, { id: 2, name: 'Bacon' }]}>Teams</Teams>
+                <Teams
+                    teams={[{ id: 1, name: 'Le Wagon' }, { id: 2, name: 'Bacon' }]}
+                    addTeam={this.addTeam}
+                >
+                    Teams
+                </Teams>
                 <Channels
                     teamName="Teamname"
                     username="Username"

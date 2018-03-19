@@ -7,9 +7,14 @@ const team = ({ id, name }) => (
     </li>
 )
 
-const Teams = ({ teams }) => (
+const Teams = ({ teams, addTeam }) => (
     <div className="teams">
-        <ul className="team-list">{teams.map(team)}</ul>
+        <ul className="team-list">
+            {teams.map(team)}
+            <button className="team-list-item" onClick={addTeam}>
+                +
+            </button>
+        </ul>
     </div>
 )
 
