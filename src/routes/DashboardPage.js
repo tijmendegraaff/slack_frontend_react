@@ -9,9 +9,11 @@ class DashboardPage extends Component {
     }
 
     render() {
+        // eslint-disable-next-line
+        const { match: { params } } = this.props
         return (
             <AppWrapper>
-                <SideBarContainer currentTeamId="1" />
+                <SideBarContainer currentTeamId={params.teamId} />
                 <HeaderWrapper channelName="general" />
                 <MessageContainer>
                     <ul className="message-list">
