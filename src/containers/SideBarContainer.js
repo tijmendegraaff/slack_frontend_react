@@ -30,6 +30,7 @@ class SideBarContainer extends Component {
     }
     addChannel() {
         console.log('add channel')
+        this.setState({ openAddChannelModal: true })
     }
 
     addTeam() {
