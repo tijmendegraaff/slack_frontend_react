@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import PropTypes from 'prop-types'
 
 class MessageContainer extends Component {
     constructor(props) {
@@ -8,6 +9,10 @@ class MessageContainer extends Component {
     render() {
         return <div className="messages">{this.props.children}</div>
     }
+}
+
+MessageContainer.propTypes = {
+    children: PropTypes.any.isRequired
 }
 
 export default MessageContainer

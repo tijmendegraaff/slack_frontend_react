@@ -1,3 +1,4 @@
 import MessageContainer from './MessageContainer'
+import SideBarContainer from './SideBarContainer'
 
-export { MessageContainer }
+export { MessageContainer, SideBarContainer }
