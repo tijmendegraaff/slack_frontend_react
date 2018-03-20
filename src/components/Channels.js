@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Icon } from 'semantic-ui-react'
 
 // eslint-disable-next-line
 const channel = ({ id, name }) => (
@@ -18,13 +19,15 @@ const user = ({ id, name, active }) => (
 )
 
 const Channels = ({
-    teamName, username, channels, users
+    teamName, username, channels, users, onAddChannelClick
 }) => (
     <div className="channels">
         <h1 className="channel-title">{teamName}</h1>
         <h1 className="channel-username">{username}</h1>
         <ul className="channel-list">
-            <li className="channel-list-header">Channels</li>
+            <li className="channel-list-header">
+                Channels <Icon name="add circle" onClick={onAddChannelClick} />
+            </li>
             {channels.map(channel)}
         </ul>
         <ul className="channel-list">
@@ -38,7 +41,8 @@ Channels.propTypes = {
     teamName: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     channels: PropTypes.array.isRequired,
-    users: PropTypes.array.isRequired
+    users: PropTypes.array.isRequired,
+    onAddChannelClick: PropTypes.func.isRequired
 }
 
 export default Channels
