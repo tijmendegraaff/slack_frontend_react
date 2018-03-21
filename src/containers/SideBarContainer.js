@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import PropTypes from 'prop-types'
 import findIndex from 'lodash/findIndex'
+import camelCase from 'lodash/camelCase'
 import { Teams, Channels, AddChannelModal, AddUsersToTeamModal } from '../components'
 import myTeamsQuery from '../graphql/queries/myTeamsQuery'
 import createChannelMutation from '../graphql/mutations/createChannelMutation'
+import addUserToTeamMutation from '../graphql/mutations/addUserToTeamMuation'
 
 class SideBarContainer extends Component {
     constructor(props) {
@@ -44,15 +46,42 @@ class SideBarContainer extends Component {
     }
 
     onCloseAddUsersToTeamModal() {
-        this.setState({ openAddUsersToTeamModal: false })
+        this.setState({ openAddUsersToTeamModal: false, addUserEmail: '' })
     }
     onOpenAddUsersToTeamModal() {
         console.log('Open add user modal')
         this.setState({ openAddUsersToTeamModal: true })
     }
 
-    handleAddUsersToTeamSubmit() {
-        console.log(`adding teammember: ${this.state.addUserEmail}`)
+    async handleAddUsersToTeamSubmit() {
+        this.setState({ isSubmitting: true })
+        const teamId = this.props.currentTeam.id
+        const email = this.state.addUserEmail
+        await this.props
+            .addUserToTeamMutation({
+                variables: {
+                    input: {
+                        email,
+                        teamId
+                    }
+                }
+            })
+            .then(() => {
+                this.setState({
+                    isSubmitting: false,
+                    openAddUsersToTeamModal: false,
+                    addUserEmail: ''
+                })
+            })
+            .catch((err) => {
+                console.log(err)
+                const errors = {}
+                err.graphQLErrors.forEach(({ key, message }) => {
+                    errors[`${camelCase(key)}Error`] = message[0]
+                })
+                console.log(err.graphQLErrors)
+                this.setState({ isSubmitting: false })
+            })
     }
 
     async handleChannelSubmit() {
@@ -60,7 +89,7 @@ class SideBarContainer extends Component {
         const { channelName, isPublic } = this.state
         const { currentTeam, history } = this.props
         await this.props
-            .mutate({
+            .createChannelMutation({
                 variables: {
                     input: {
                         name: channelName,
@@ -137,7 +166,12 @@ class SideBarContainer extends Component {
 }
 
 SideBarContainer.propTypes = {
-    mutate: PropTypes.func.isRequired
+    createChannelMutation: PropTypes.func.isRequired,
+    currentTeam: PropTypes.object.isRequired,
+    addUserToTeamMutation: PropTypes.func.isRequired
 }
 
-export default graphql(createChannelMutation)(SideBarContainer)
+export default compose(
+    graphql(createChannelMutation, { name: 'createChannelMutation' }),
+    graphql(addUserToTeamMutation, { name: 'addUserToTeamMutation' })
+)(SideBarContainer)
