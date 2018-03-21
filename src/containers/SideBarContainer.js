@@ -119,7 +119,7 @@ class SideBarContainer extends Component {
 
     render() {
         // eslint-disable-next-line
-        const { myTeams, currentTeam } = this.props
+        const { myTeams, currentTeam, currentUser } = this.props
         return [
             <Teams
                 key="team-sidebar-component"
@@ -133,11 +133,13 @@ class SideBarContainer extends Component {
                 teamId={currentTeam.id}
                 key="channel-sidebar-component"
                 teamName={currentTeam.name}
-                username="Username"
+                username={currentUser.userName}
                 channels={currentTeam.channels}
                 users={[{ id: 1, name: 'slackbot' }, { id: 2, name: 'Tijmen' }]}
                 toggleAdChannelModal={this.toggleAdChannelModal}
                 toggleAddUsersToTeamModal={this.toggleAddUsersToTeamModal}
+                currentUser={currentUser}
+                owner={currentTeam.owner.id}
             />,
             <AddChannelModal
                 open={this.state.openAddChannelModal}
