@@ -8,6 +8,7 @@ export default gql`
             channels {
                 id
                 name
+                isPublic
             }
         }
     }
