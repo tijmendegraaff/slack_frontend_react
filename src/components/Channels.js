@@ -1,12 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Link } from 'react-router-dom'
 import { Icon } from 'semantic-ui-react'
 
 // eslint-disable-next-line
-const channel = ({ id, name }) => (
-    <li key={`channel-${id}`} className="channel-list-item">
-        # {name}
-    </li>
+const channel = ({ id, name }, teamId) => (
+    <Link key={`channel-${id}`} to={`/dashboard/${teamId}/${id}`}>
+        <li className="channel-list-item"># {name}</li>
+    </Link>
 )
 
 const ActiveUserSpan = () => <span className="blue">●</span>
@@ -19,7 +20,7 @@ const user = ({ id, name, active }) => (
 )
 
 const Channels = ({
-    teamName, username, channels, users, onAddChannelClick
+    teamName, username, channels, users, onAddChannelClick, teamId
 }) => (
     <div className="channels">
         <h1 className="channel-title">{teamName}</h1>
@@ -28,7 +29,7 @@ const Channels = ({
             <li className="channel-list-header">
                 Channels <Icon name="add circle" onClick={onAddChannelClick} />
             </li>
-            {channels.map(channel)}
+            {channels.map(c => channel(c, teamId))}
         </ul>
         <ul className="channel-list">
             <li className="channel-list-header">Users</li>
@@ -42,7 +43,8 @@ Channels.propTypes = {
     username: PropTypes.string.isRequired,
     channels: PropTypes.array.isRequired,
     users: PropTypes.array.isRequired,
-    onAddChannelClick: PropTypes.func.isRequired
+    onAddChannelClick: PropTypes.func.isRequired,
+    teamId: PropTypes.string.isRequired
 }
 
 export default Channels
