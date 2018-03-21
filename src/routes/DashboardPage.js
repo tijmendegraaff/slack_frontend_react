@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { graphql } from 'react-apollo'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router-dom'
+import findIndex from 'lodash/findIndex'
 import myTeamsQuery from '../graphql/queries/myTeamsQuery'
 import { AppWrapper, HeaderWrapper, SendMessage } from '../components'
 import { MessageContainer, SideBarContainer } from '../containers'
@@ -27,11 +28,13 @@ class DashboardPage extends Component {
             return <Redirect to="/create-team" />
         }
 
-        const currentTeam = teamId ? myTeams.filter(t => t.id === teamId)[0] : myTeams[0]
+        const teamIndex = teamId ? findIndex(myTeams, ['id', teamId]) : 0
+        const currentTeam = teamIndex === -1 ? myTeams[0] : myTeams[teamIndex]
 
-        const currentChannel = channelId
-            ? currentTeam.channels.filter(c => c.id === channelId)[0]
-            : currentTeam.channels[0]
+        const channelIndex = channelId ? findIndex(currentTeam.channels, ['id', channelId]) : 0
+        const currentChannel =
+            channelIndex === -1 ? currentTeam.channels[0] : currentTeam.channels[channelIndex]
+
         return (
             <AppWrapper>
                 <SideBarContainer myTeams={myTeams} currentTeam={currentTeam} history={history} />
