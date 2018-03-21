@@ -4,10 +4,12 @@ import { Modal, Header, Input, Form, Button } from 'semantic-ui-react'
 const AddUsersToTeamModal = ({
     open,
     onCloseAddUsersToTeamModal,
-    channelName,
+    addUserEmail,
+    addUserEmailError,
     onChange,
     handleAddUsersToTeamSubmit,
-    isSubmitting
+    isSubmitting,
+    teamId
 }) => (
     <Modal open={open} className="modal-container" onClose={onCloseAddUsersToTeamModal}>
         <Modal.Header>Add a users to this team!</Modal.Header>
@@ -16,10 +18,10 @@ const AddUsersToTeamModal = ({
             <Form>
                 <Form.Field>
                     <Input
-                        placeholder="channel name"
-                        name="channelName"
+                        placeholder="email"
+                        name="addUserEmail"
                         onChange={onChange}
-                        value={channelName}
+                        value={addUserEmail}
                         fluid
                     />
                 </Form.Field>

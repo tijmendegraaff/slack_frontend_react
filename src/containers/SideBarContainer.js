@@ -122,6 +122,7 @@ class SideBarContainer extends Component {
                 key="add-channel-modal"
             />,
             <AddUsersToTeamModal
+                teamId={currentTeam.id}
                 open={this.state.openAddUsersToTeamModal}
                 onCloseAddUsersToTeamModal={this.onCloseAddUsersToTeamModal}
                 addUserEmail={this.state.addUserEmail}
