@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import PropTypes from 'prop-types'
 import { Redirect } from 'react-router-dom'
 import findIndex from 'lodash/findIndex'
 import myTeamsQuery from '../graphql/queries/myTeamsQuery'
-import { AppWrapper, HeaderWrapper, SendMessage } from '../components'
+import currentUserQuery from '../graphql/queries/currentUserQuery'
+import { AppWrapper, HeaderWrapper } from '../components'
 import { MessageContainer, SideBarContainer } from '../containers'
 
 class DashboardPage extends Component {
@@ -18,9 +19,12 @@ class DashboardPage extends Component {
         const {
             match: { params: { teamId, channelId } },
             history,
-            data: { myTeams, loading }
+            myTeamsQuery: { myTeams },
+            currentUserQuery: { currentUser }
         } = this.props
-        if (loading) {
+        const myTeamsQueryLoading = this.props.myTeamsQuery.loading
+        const currentUserQueryLoading = this.props.currentUserQuery.loading
+        if (myTeamsQueryLoading || currentUserQueryLoading) {
             return null
         }
 
@@ -37,26 +41,32 @@ class DashboardPage extends Component {
 
         return (
             <AppWrapper>
-                <SideBarContainer myTeams={myTeams} currentTeam={currentTeam} history={history} />
+                <SideBarContainer
+                    myTeams={myTeams}
+                    currentTeam={currentTeam}
+                    history={history}
+                    currentUser={currentUser}
+                />
                 {currentChannel && <HeaderWrapper channelName={currentChannel.name} />}
                 {currentChannel && (
-                    <MessageContainer channelId={currentChannel.id}>
-                        <ul className="message-list">
-                            <li>Hey</li>
-                            <li>What is going on?</li>
-                        </ul>
-                    </MessageContainer>
+                    <MessageContainer
+                        channelId={currentChannel.id}
+                        channelName={currentChannel.name}
+                    />
                 )}
-                {currentChannel && <SendMessage channelName={currentChannel.name} />}
             </AppWrapper>
         )
     }
 }
 
 DashboardPage.propTypes = {
-    data: PropTypes.object.isRequired,
+    myTeamsQuery: PropTypes.object.isRequired,
+    currentUserQuery: PropTypes.object.isRequired,
     history: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired
 }
 
-export default graphql(myTeamsQuery)(DashboardPage)
+export default compose(
+    graphql(myTeamsQuery, { name: 'myTeamsQuery' }),
+    graphql(currentUserQuery, { name: 'currentUserQuery' })
+)(DashboardPage)
