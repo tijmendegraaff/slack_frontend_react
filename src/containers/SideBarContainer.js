@@ -1,20 +1,26 @@
 import React, { Component } from 'react'
 import { graphql } from 'react-apollo'
 import PropTypes from 'prop-types'
+import findIndex from 'lodash/findIndex'
 import { Teams, Channels, AddChannelModal } from '../components'
 import myTeamsQuery from '../graphql/queries/myTeamsQuery'
+import createChannelMutation from '../graphql/mutations/createChannelMutation'
 
 class SideBarContainer extends Component {
     constructor(props) {
         super(props)
         this.state = {
             openAddChannelModal: false,
-            channelName: ''
+            isSubmitting: false,
+            channelName: '',
+            channelNameError: '',
+            isPublic: true
         }
         this.addTeam = this.addTeam.bind(this)
-        this.addChannel = this.addChannel.bind(this)
+        this.onOpenAddChannelModal = this.onOpenAddChannelModal.bind(this)
         this.onCloseAddChannelModal = this.onCloseAddChannelModal.bind(this)
         this.onChange = this.onChange.bind(this)
+        this.handleChannelSubmit = this.handleChannelSubmit.bind(this)
     }
 
     onChange(e) {
@@ -22,15 +28,43 @@ class SideBarContainer extends Component {
         this.setState({
             [name]: value
         })
-        console.log(this.state)
     }
 
     onCloseAddChannelModal() {
         this.setState({ openAddChannelModal: false, channelName: '' })
     }
-    addChannel() {
-        console.log('add channel')
+    onOpenAddChannelModal() {
         this.setState({ openAddChannelModal: true })
+    }
+
+    async handleChannelSubmit() {
+        this.setState({ isSubmitting: true })
+        const { channelName, isPublic } = this.state
+        const { currentTeam, history } = this.props
+        await this.props
+            .mutate({
+                variables: {
+                    input: {
+                        name: channelName,
+                        isPublic,
+                        teamId: currentTeam.id
+                    }
+                },
+                update: (proxy, { data: { createChannel } }) => {
+                    const data = proxy.readQuery({ query: myTeamsQuery })
+                    const currentTeamIndex = findIndex(data.myTeams, ['id', currentTeam.id])
+                    data.myTeams[currentTeamIndex].channels.push(createChannel)
+                    proxy.writeQuery({ query: myTeamsQuery, data })
+                }
+            })
+            .then((res) => {
+                this.setState({ isSubmitting: false, openAddChannelModal: false, channelName: '' })
+                history.push(`/dashboard/${currentTeam.id}/${res.data.createChannel.id}`)
+            })
+            .catch((err) => {
+                console.log(err)
+                this.setState({ isSubmitting: false })
+            })
     }
 
     addTeam() {
@@ -38,15 +72,8 @@ class SideBarContainer extends Component {
     }
 
     render() {
-        console.log(this.state.openAddChannelModal)
         // eslint-disable-next-line
-        const { data: { loading, myTeams }, currentTeamId } = this.props
-        if (loading) {
-            return null
-        }
-        const currentTeam = currentTeamId
-            ? myTeams.filter(t => t.id === currentTeamId)[0]
-            : myTeams[0]
+        const { myTeams, currentTeam } = this.props
         return [
             <Teams
                 key="team-sidebar-component"
@@ -57,18 +84,22 @@ class SideBarContainer extends Component {
                 addTeam={this.addTeam}
             />,
             <Channels
+                teamId={currentTeam.id}
                 key="channel-sidebar-component"
                 teamName={currentTeam.name}
                 username="Username"
                 channels={currentTeam.channels}
                 users={[{ id: 1, name: 'slackbot' }, { id: 2, name: 'Tijmen' }]}
-                onAddChannelClick={this.addChannel}
+                onAddChannelClick={this.onOpenAddChannelModal}
             />,
             <AddChannelModal
                 open={this.state.openAddChannelModal}
                 onCloseAddChannelModal={this.onCloseAddChannelModal}
                 channelName={this.state.channelName}
+                channelNameError={this.state.channelNameError}
                 onChange={this.onChange}
+                handleChannelSubmit={this.handleChannelSubmit}
+                isSubmitting={this.state.isSubmitting}
                 key="add-channel-modal"
             />
         ]
@@ -76,7 +107,7 @@ class SideBarContainer extends Component {
 }
 
 SideBarContainer.propTypes = {
-    data: PropTypes.object.isRequired
+    mutate: PropTypes.func.isRequired
 }
 
-export default graphql(myTeamsQuery)(SideBarContainer)
+export default graphql(createChannelMutation)(SideBarContainer)
