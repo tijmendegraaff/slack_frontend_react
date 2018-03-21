@@ -10,6 +10,9 @@ export default gql`
                 name
                 isPublic
             }
+            owner {
+                id
+            }
         }
     }
 `
