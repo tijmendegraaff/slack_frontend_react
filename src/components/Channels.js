@@ -26,30 +26,40 @@ const Channels = ({
     users,
     toggleAdChannelModal,
     teamId,
-    toggleAddUsersToTeamModal
-}) => (
-    <div className="channels">
-        <h1 className="channel-title">{teamName}</h1>
-        <h1 className="channel-username">{username}</h1>
-        <ul className="channel-list">
-            <li className="channel-list-header">
-                Channels <Icon name="add circle" onClick={toggleAdChannelModal} />
-            </li>
-            {channels.map(c => channel(c, teamId))}
-        </ul>
-        <ul className="channel-list">
-            <li className="channel-list-header">
-                Users <Icon name="add circle" />
-            </li>
-            {users.map(user)}
-        </ul>
-        <div>
-            <a href="#invite-people" onClick={toggleAddUsersToTeamModal}>
-                <h1 className="channel-username">Add users</h1>
-            </a>
+    toggleAddUsersToTeamModal,
+    currentUser,
+    owner
+}) => {
+    console.log(currentUser)
+    return (
+        <div className="channels">
+            <h1 className="channel-title">{teamName}</h1>
+            <h1 className="channel-username">{username}</h1>
+            <ul className="channel-list">
+                <li className="channel-list-header">
+                    Channels{' '}
+                    {currentUser.id === owner && (
+                        <Icon name="add circle" onClick={toggleAdChannelModal} />
+                    )}
+                </li>
+                {channels.map(c => channel(c, teamId))}
+            </ul>
+            <ul className="channel-list">
+                <li className="channel-list-header">
+                    Users <Icon name="add circle" />
+                </li>
+                {users.map(user)}
+            </ul>
+            {currentUser.id === owner && (
+                <div>
+                    <a href="#invite-people" onClick={toggleAddUsersToTeamModal}>
+                        <h1 className="channel-username">Add users</h1>
+                    </a>
+                </div>
+            )}
         </div>
-    </div>
-)
+    )
+}
 
 Channels.propTypes = {
     teamName: PropTypes.string.isRequired,
@@ -58,7 +68,9 @@ Channels.propTypes = {
     users: PropTypes.array.isRequired,
     toggleAdChannelModal: PropTypes.func.isRequired,
     toggleAddUsersToTeamModal: PropTypes.func.isRequired,
-    teamId: PropTypes.string.isRequired
+    teamId: PropTypes.string.isRequired,
+    currentUser: PropTypes.object.isRequired,
+    owner: PropTypes.string.isRequired
 }
 
 export default Channels
