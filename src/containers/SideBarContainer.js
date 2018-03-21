@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { graphql } from 'react-apollo'
 import PropTypes from 'prop-types'
 import findIndex from 'lodash/findIndex'
-import { Teams, Channels, AddChannelModal } from '../components'
+import { Teams, Channels, AddChannelModal, AddUsersToTeamModal } from '../components'
 import myTeamsQuery from '../graphql/queries/myTeamsQuery'
 import createChannelMutation from '../graphql/mutations/createChannelMutation'
 
@@ -11,6 +11,7 @@ class SideBarContainer extends Component {
         super(props)
         this.state = {
             openAddChannelModal: false,
+            openAddUsersToTeamModal: false,
             isSubmitting: false,
             channelName: '',
             channelNameError: '',
@@ -21,6 +22,9 @@ class SideBarContainer extends Component {
         this.onCloseAddChannelModal = this.onCloseAddChannelModal.bind(this)
         this.onChange = this.onChange.bind(this)
         this.handleChannelSubmit = this.handleChannelSubmit.bind(this)
+        this.onCloseAddUsersToTeamModal = this.onCloseAddUsersToTeamModal.bind(this)
+        this.onOpenAddUsersToTeamModal = this.onOpenAddUsersToTeamModal.bind(this)
+        this.handleAddUsersToTeamSubmit = this.handleAddUsersToTeamSubmit.bind(this)
     }
 
     onChange(e) {
@@ -35,6 +39,18 @@ class SideBarContainer extends Component {
     }
     onOpenAddChannelModal() {
         this.setState({ openAddChannelModal: true })
+    }
+
+    onCloseAddUsersToTeamModal() {
+        this.setState({ openAddUsersToTeamModal: false })
+    }
+    onOpenAddUsersToTeamModal() {
+        console.log('Open add user modal')
+        this.setState({ openAddUsersToTeamModal: true })
+    }
+
+    handleAddUsersToTeamSubmit() {
+        console.log('adding teammembers!')
     }
 
     async handleChannelSubmit() {
@@ -91,6 +107,7 @@ class SideBarContainer extends Component {
                 channels={currentTeam.channels}
                 users={[{ id: 1, name: 'slackbot' }, { id: 2, name: 'Tijmen' }]}
                 onAddChannelClick={this.onOpenAddChannelModal}
+                onAddUsersToTeamClick={this.onOpenAddUsersToTeamModal}
             />,
             <AddChannelModal
                 open={this.state.openAddChannelModal}
@@ -101,6 +118,16 @@ class SideBarContainer extends Component {
                 handleChannelSubmit={this.handleChannelSubmit}
                 isSubmitting={this.state.isSubmitting}
                 key="add-channel-modal"
+            />,
+            <AddUsersToTeamModal
+                open={this.state.openAddUsersToTeamModal}
+                onCloseAddUsersToTeamModal={this.onCloseAddUsersToTeamModal}
+                // channelName={this.state.channelName}
+                // channelNameError={this.state.channelNameError}
+                onChange={this.onChange}
+                handleAddUsersToTeamSubmit={this.handleAddUsersToTeamSubmit}
+                isSubmitting={this.state.isSubmitting}
+                key="add-users-to-channel-modal"
             />
         ]
     }
