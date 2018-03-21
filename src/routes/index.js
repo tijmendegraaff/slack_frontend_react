@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import HomePage from './HomePage'
 import RegisterPage from './RegisterPage'
 import LoginPage from './LoginPage'
+import CreateTeamPage from './CreateTeamPage'
 import DashboardPage from './DashboardPage'
 import NotFoundPage from './NotFoundPage'
 
@@ -44,6 +45,7 @@ export default () => (
             <Route path="/register" exact component={RegisterPage} />
             <Route path="/login" exact component={LoginPage} />
             <PrivateRoute path="/dashboard/:teamId?/:channelId?" exact component={DashboardPage} />
+            <PrivateRoute path="/create-team" exact component={CreateTeamPage} />
             <Route component={NotFoundPage} />
         </Switch>
     </BrowserRouter>
