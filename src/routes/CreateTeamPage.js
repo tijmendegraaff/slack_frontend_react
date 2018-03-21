@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { Container, Header, Button, Message, Form } from 'semantic-ui-react'
-// import { withRouter } from 'react-router-dom'
-import createTeamMutation from '../graphql/mutations/createTeamMutation'
 import { graphql } from 'react-apollo'
 import PropTypes from 'prop-types'
+import createTeamMutation from '../graphql/mutations/createTeamMutation'
+// import myTeamsQuery from '../graphql/queries/myTeamsQuery'
 
 class CreateTeamPage extends Component {
     constructor(props) {
@@ -24,6 +24,7 @@ class CreateTeamPage extends Component {
     }
 
     async onSumbit() {
+        this.setState({ createTeamError: '' })
         const { teamName } = this.state
         await this.props
             .mutate({
@@ -32,18 +33,26 @@ class CreateTeamPage extends Component {
                         name: teamName
                     }
                 }
+                // refetchQueries: [`currentUser`]
+                // update: (proxy, { data: { createTeam } }) => {
+                //     const data = proxy.readQuery({ query: myTeamsQuery })
+                //     console.log(data)
+                // data.myTeams.push(createTeam)
+                // proxy.writeQuery({ query: myTeamsQuery, data })
+                // }
             })
             .then((res) => {
+                // await
+                // TODO first team you make causes redirect to mallfunction
                 console.log(res)
                 this.props.history.push(`/dashboard/${res.data.createTeam.id}`)
             })
             .catch((err) => {
-                console.log(err)
-                // const { message } = err.graphQLErrors[0]
-                // this.setState({
-                //     emailError: message,
-                //     passwordError: message
-                // })
+                console.log(err.graphQLErrors[0].message[0])
+                const message = err.graphQLErrors[0].message[0]
+                this.setState({
+                    createTeamError: message
+                })
             })
     }
 
@@ -63,6 +72,7 @@ class CreateTeamPage extends Component {
                             value={teamName}
                         />
                     </Form.Field>
+                    {createTeamError && <Message size="tiny">{createTeamError}</Message>}
                     <Button type="button" onClick={this.onSumbit} size="big">
                         Add Team
                     </Button>
@@ -70,6 +80,11 @@ class CreateTeamPage extends Component {
             </Container>
         )
     }
+}
+
+CreateTeamPage.propTypes = {
+    history: PropTypes.object.isRequired,
+    mutate: PropTypes.func.isRequired
 }
 
 export default graphql(createTeamMutation)(CreateTeamPage)
