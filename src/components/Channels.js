@@ -20,7 +20,13 @@ const user = ({ id, name, active }) => (
 )
 
 const Channels = ({
-    teamName, username, channels, users, onAddChannelClick, teamId
+    teamName,
+    username,
+    channels,
+    users,
+    onAddChannelClick,
+    teamId,
+    onAddUsersToTeamClick
 }) => (
     <div className="channels">
         <h1 className="channel-title">{teamName}</h1>
@@ -32,9 +38,16 @@ const Channels = ({
             {channels.map(c => channel(c, teamId))}
         </ul>
         <ul className="channel-list">
-            <li className="channel-list-header">Users</li>
+            <li className="channel-list-header">
+                Users <Icon name="add circle" />
+            </li>
             {users.map(user)}
         </ul>
+        <div>
+            <a href="#invite-people" onClick={onAddUsersToTeamClick}>
+                <h1 className="channel-username">Add users</h1>
+            </a>
+        </div>
     </div>
 )
 
@@ -44,6 +57,7 @@ Channels.propTypes = {
     channels: PropTypes.array.isRequired,
     users: PropTypes.array.isRequired,
     onAddChannelClick: PropTypes.func.isRequired,
+    onAddUsersToTeamClick: PropTypes.func.isRequired,
     teamId: PropTypes.string.isRequired
 }
 

@@ -24,11 +24,11 @@ const AddChannelModal = ({
                     />
                 </Form.Field>
                 <Form.Group widths="equal">
-                    <Button disabled={isSubmitting} onClick={onCloseAddChannelModal} fluid>
-                        Cancel
-                    </Button>
                     <Button disabled={isSubmitting} onClick={handleChannelSubmit} fluid>
                         Create Channel
+                    </Button>
+                    <Button disabled={isSubmitting} onClick={onCloseAddChannelModal} fluid>
+                        Cancel
                     </Button>
                 </Form.Group>
             </Form>
