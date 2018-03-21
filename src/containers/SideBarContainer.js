@@ -15,6 +15,8 @@ class SideBarContainer extends Component {
             isSubmitting: false,
             channelName: '',
             channelNameError: '',
+            addUserEmail: '',
+            addUserEmailError: '',
             isPublic: true
         }
         this.addTeam = this.addTeam.bind(this)
@@ -50,7 +52,7 @@ class SideBarContainer extends Component {
     }
 
     handleAddUsersToTeamSubmit() {
-        console.log('adding teammembers!')
+        console.log(`adding teammember: ${this.state.addUserEmail}`)
     }
 
     async handleChannelSubmit() {
@@ -122,8 +124,8 @@ class SideBarContainer extends Component {
             <AddUsersToTeamModal
                 open={this.state.openAddUsersToTeamModal}
                 onCloseAddUsersToTeamModal={this.onCloseAddUsersToTeamModal}
-                // channelName={this.state.channelName}
-                // channelNameError={this.state.channelNameError}
+                addUserEmail={this.state.addUserEmail}
+                addUserEmailError={this.state.addUserEmailError}
                 onChange={this.onChange}
                 handleAddUsersToTeamSubmit={this.handleAddUsersToTeamSubmit}
                 isSubmitting={this.state.isSubmitting}

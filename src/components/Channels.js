@@ -39,10 +39,15 @@ const Channels = ({
         </ul>
         <ul className="channel-list">
             <li className="channel-list-header">
-                Users <Icon name="add circle" onClick={onAddUsersToTeamClick} />
+                Users <Icon name="add circle" />
             </li>
             {users.map(user)}
         </ul>
+        <div>
+            <a href="#invite-people" onClick={onAddUsersToTeamClick}>
+                <h1 className="channel-username">Add users</h1>
+            </a>
+        </div>
     </div>
 )
 
