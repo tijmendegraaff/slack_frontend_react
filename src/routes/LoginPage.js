@@ -38,7 +38,7 @@ class LoginPage extends Component {
             })
             .then((res) => {
                 localStorage.setItem('token', res.data.createSession.token)
-                this.props.history.push('/')
+                this.props.history.push('/dashboard')
             })
             .catch((err) => {
                 const { message } = err.graphQLErrors[0]
