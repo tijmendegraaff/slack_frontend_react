@@ -3,13 +3,13 @@ import { Modal, Header, Input, Form, Button } from 'semantic-ui-react'
 
 const AddChannelModal = ({
     open,
-    onCloseAddChannelModal,
+    toggleAdChannelModal,
     channelName,
     onChange,
     handleChannelSubmit,
     isSubmitting
 }) => (
-    <Modal open={open} className="modal-container" onClose={onCloseAddChannelModal}>
+    <Modal open={open} className="modal-container" onClose={toggleAdChannelModal}>
         <Modal.Header>Add a channel!</Modal.Header>
         <Modal.Content>
             <Header>Please enter a channelName</Header>
@@ -27,7 +27,7 @@ const AddChannelModal = ({
                     <Button disabled={isSubmitting} onClick={handleChannelSubmit} fluid>
                         Create Channel
                     </Button>
-                    <Button disabled={isSubmitting} onClick={onCloseAddChannelModal} fluid>
+                    <Button disabled={isSubmitting} onClick={toggleAdChannelModal} fluid>
                         Cancel
                     </Button>
                 </Form.Group>

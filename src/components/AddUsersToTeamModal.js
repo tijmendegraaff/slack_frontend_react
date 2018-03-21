@@ -3,7 +3,7 @@ import { Modal, Header, Input, Form, Button } from 'semantic-ui-react'
 
 const AddUsersToTeamModal = ({
     open,
-    onCloseAddUsersToTeamModal,
+    toggleAddUsersToTeamModal,
     addUserEmail,
     addUserEmailError,
     onChange,
@@ -11,7 +11,7 @@ const AddUsersToTeamModal = ({
     isSubmitting,
     teamId
 }) => (
-    <Modal open={open} className="modal-container" onClose={onCloseAddUsersToTeamModal}>
+    <Modal open={open} className="modal-container" onClose={toggleAddUsersToTeamModal}>
         <Modal.Header>Add a users to this team!</Modal.Header>
         <Modal.Content>
             <Header>Add users to your team!</Header>
@@ -29,7 +29,7 @@ const AddUsersToTeamModal = ({
                     <Button disabled={isSubmitting} onClick={handleAddUsersToTeamSubmit} fluid>
                         Add user
                     </Button>
-                    <Button disabled={isSubmitting} onClick={onCloseAddUsersToTeamModal} fluid>
+                    <Button disabled={isSubmitting} onClick={toggleAddUsersToTeamModal} fluid>
                         Cancel
                     </Button>
                 </Form.Group>

@@ -24,16 +24,16 @@ const Channels = ({
     username,
     channels,
     users,
-    onAddChannelClick,
+    toggleAdChannelModal,
     teamId,
-    onAddUsersToTeamClick
+    toggleAddUsersToTeamModal
 }) => (
     <div className="channels">
         <h1 className="channel-title">{teamName}</h1>
         <h1 className="channel-username">{username}</h1>
         <ul className="channel-list">
             <li className="channel-list-header">
-                Channels <Icon name="add circle" onClick={onAddChannelClick} />
+                Channels <Icon name="add circle" onClick={toggleAdChannelModal} />
             </li>
             {channels.map(c => channel(c, teamId))}
         </ul>
@@ -44,7 +44,7 @@ const Channels = ({
             {users.map(user)}
         </ul>
         <div>
-            <a href="#invite-people" onClick={onAddUsersToTeamClick}>
+            <a href="#invite-people" onClick={toggleAddUsersToTeamModal}>
                 <h1 className="channel-username">Add users</h1>
             </a>
         </div>
@@ -56,8 +56,8 @@ Channels.propTypes = {
     username: PropTypes.string.isRequired,
     channels: PropTypes.array.isRequired,
     users: PropTypes.array.isRequired,
-    onAddChannelClick: PropTypes.func.isRequired,
-    onAddUsersToTeamClick: PropTypes.func.isRequired,
+    toggleAdChannelModal: PropTypes.func.isRequired,
+    toggleAddUsersToTeamModal: PropTypes.func.isRequired,
     teamId: PropTypes.string.isRequired
 }
 

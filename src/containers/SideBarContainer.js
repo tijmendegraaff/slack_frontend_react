@@ -21,13 +21,11 @@ class SideBarContainer extends Component {
             addUserEmailError: '',
             isPublic: true
         }
-        this.addTeam = this.addTeam.bind(this)
-        this.onOpenAddChannelModal = this.onOpenAddChannelModal.bind(this)
-        this.onCloseAddChannelModal = this.onCloseAddChannelModal.bind(this)
         this.onChange = this.onChange.bind(this)
+        this.addTeam = this.addTeam.bind(this)
+        this.toggleAdChannelModal = this.toggleAdChannelModal.bind(this)
+        this.toggleAddUsersToTeamModal = this.toggleAddUsersToTeamModal.bind(this)
         this.handleChannelSubmit = this.handleChannelSubmit.bind(this)
-        this.onCloseAddUsersToTeamModal = this.onCloseAddUsersToTeamModal.bind(this)
-        this.onOpenAddUsersToTeamModal = this.onOpenAddUsersToTeamModal.bind(this)
         this.handleAddUsersToTeamSubmit = this.handleAddUsersToTeamSubmit.bind(this)
     }
 
@@ -38,19 +36,20 @@ class SideBarContainer extends Component {
         })
     }
 
-    onCloseAddChannelModal() {
-        this.setState({ openAddChannelModal: false, channelName: '' })
-    }
-    onOpenAddChannelModal() {
-        this.setState({ openAddChannelModal: true })
+    toggleAdChannelModal(e) {
+        e.preventDefault()
+        this.setState(state => ({
+            openAddChannelModal: !state.openAddChannelModal
+        }))
+        this.setState({ channelName: '' })
     }
 
-    onCloseAddUsersToTeamModal() {
-        this.setState({ openAddUsersToTeamModal: false, addUserEmail: '' })
-    }
-    onOpenAddUsersToTeamModal() {
-        console.log('Open add user modal')
-        this.setState({ openAddUsersToTeamModal: true })
+    toggleAddUsersToTeamModal(e) {
+        e.preventDefault()
+        this.setState(state => ({
+            openAddUsersToTeamModal: !state.openAddUsersToTeamModal
+        }))
+        this.setState({ addUserEmail: '' })
     }
 
     async handleAddUsersToTeamSubmit() {
@@ -115,7 +114,7 @@ class SideBarContainer extends Component {
     }
 
     addTeam() {
-        console.log('add a team')
+        this.props.history.push('/create-team')
     }
 
     render() {
@@ -137,12 +136,12 @@ class SideBarContainer extends Component {
                 username="Username"
                 channels={currentTeam.channels}
                 users={[{ id: 1, name: 'slackbot' }, { id: 2, name: 'Tijmen' }]}
-                onAddChannelClick={this.onOpenAddChannelModal}
-                onAddUsersToTeamClick={this.onOpenAddUsersToTeamModal}
+                toggleAdChannelModal={this.toggleAdChannelModal}
+                toggleAddUsersToTeamModal={this.toggleAddUsersToTeamModal}
             />,
             <AddChannelModal
                 open={this.state.openAddChannelModal}
-                onCloseAddChannelModal={this.onCloseAddChannelModal}
+                toggleAdChannelModal={this.toggleAdChannelModal}
                 channelName={this.state.channelName}
                 channelNameError={this.state.channelNameError}
                 onChange={this.onChange}
@@ -153,7 +152,7 @@ class SideBarContainer extends Component {
             <AddUsersToTeamModal
                 teamId={currentTeam.id}
                 open={this.state.openAddUsersToTeamModal}
-                onCloseAddUsersToTeamModal={this.onCloseAddUsersToTeamModal}
+                toggleAddUsersToTeamModal={this.toggleAddUsersToTeamModal}
                 addUserEmail={this.state.addUserEmail}
                 addUserEmailError={this.state.addUserEmailError}
                 onChange={this.onChange}
@@ -168,7 +167,8 @@ class SideBarContainer extends Component {
 SideBarContainer.propTypes = {
     createChannelMutation: PropTypes.func.isRequired,
     currentTeam: PropTypes.object.isRequired,
-    addUserToTeamMutation: PropTypes.func.isRequired
+    addUserToTeamMutation: PropTypes.func.isRequired,
+    history: PropTypes.object.isRequired
 }
 
 export default compose(
