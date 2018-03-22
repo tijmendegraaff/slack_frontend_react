@@ -4,6 +4,7 @@ import { graphql, compose } from 'react-apollo'
 import { SendMessageWrapper, MessagesWrapper } from '../components'
 import createMessageMutation from '../graphql/mutations/createMessageMutation'
 import messagesQuery from '../graphql/queries/messagesQuery'
+import newChannelMessageSubscription from '../graphql/subscriptions/newChannelMessageSubscription'
 
 const ENTER_KEY = 13
 
@@ -18,6 +19,26 @@ class MessageContainer extends Component {
         this.onKeyDown = this.onKeyDown.bind(this)
         this.onChange = this.onChange.bind(this)
         this.handleMessageSubmit = this.handleMessageSubmit.bind(this)
+        this.subscribe = this.subscribe.bind(this)
+    }
+
+    componentWillMount() {
+        this.unsubscribe = this.subscribe(this.props.channelId)
+    }
+
+    componentWillReceiveProps({ channelId }) {
+        if (this.props.channelId !== channelId) {
+            if (this.unsubscribe) {
+                this.unsubscribe()
+            }
+            this.unsubscribe = this.subscribe(channelId)
+        }
+    }
+
+    componentWillUnmount() {
+        if (this.unsubscribe) {
+            this.unsubscribe()
+        }
     }
 
     onChange(e) {
@@ -31,6 +52,26 @@ class MessageContainer extends Component {
         if (e.keyCode === ENTER_KEY && !this.state.isSubmitting) {
             this.handleMessageSubmit(e)
         }
+    }
+
+    subscribe(channelId) {
+        console.log(this.props)
+        this.props.data.subscribeToMore({
+            document: newChannelMessageSubscription,
+            variables: {
+                channelId
+            },
+            updateQuery: (prev, { subscriptionData }) => {
+                if (!subscriptionData) {
+                    return prev
+                }
+
+                return {
+                    ...prev,
+                    messages: [...prev.messages, subscriptionData.data.newChannelMessage]
+                }
+            }
+        })
     }
 
     async handleMessageSubmit(e) {
@@ -63,7 +104,6 @@ class MessageContainer extends Component {
     render() {
         const { channelName, data: { messages } } = this.props
         const { message, messageError, isSubmitting } = this.state
-        console.log(this.props)
         if (!messages) {
             return null
         }

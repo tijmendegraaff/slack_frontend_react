@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { Comment } from 'semantic-ui-react'
 
 const MessagesWrapper = ({ messages }) => {
-    console.log(messages)
     if (messages.length === 0) {
         return null
     }
