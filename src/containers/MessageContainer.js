@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { graphql } from 'react-apollo'
+import { graphql, compose } from 'react-apollo'
 import { SendMessageWrapper, MessagesWrapper } from '../components'
 import createMessageMutation from '../graphql/mutations/createMessageMutation'
+import messagesQuery from '../graphql/queries/messagesQuery'
 
 const ENTER_KEY = 13
 
@@ -60,11 +61,14 @@ class MessageContainer extends Component {
     }
 
     render() {
-        console.log(this.props)
-        const { channelName } = this.props
+        const { channelName, data: { messages } } = this.props
         const { message, messageError, isSubmitting } = this.state
+        console.log(this.props)
+        if (!messages) {
+            return null
+        }
         return [
-            <MessagesWrapper key="message-wrapper" />,
+            <MessagesWrapper key="message-wrapper" messages={messages} />,
             <SendMessageWrapper
                 key="send-message-input"
                 channelName={channelName}
@@ -80,7 +84,11 @@ class MessageContainer extends Component {
 
 MessageContainer.propTypes = {
     channelName: PropTypes.string.isRequired,
-    mutate: PropTypes.func.isRequired
+    mutate: PropTypes.func.isRequired,
+    data: PropTypes.object.isRequired
 }
 
-export default graphql(createMessageMutation)(MessageContainer)
+export default compose(
+    graphql(createMessageMutation),
+    graphql(messagesQuery, { options: ({ channelId }) => ({ variables: { channelId } }) })
+)(MessageContainer)
