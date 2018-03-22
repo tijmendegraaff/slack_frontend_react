@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { graphql, compose } from 'react-apollo'
+import { graphql } from 'react-apollo'
 import { SendMessageWrapper, MessagesWrapper } from '../components'
 import createMessageMutation from '../graphql/mutations/createMessageMutation'
 
@@ -79,7 +79,8 @@ class MessageContainer extends Component {
 }
 
 MessageContainer.propTypes = {
-    channelName: PropTypes.string.isRequired
+    channelName: PropTypes.string.isRequired,
+    mutate: PropTypes.func.isRequired
 }
 
 export default graphql(createMessageMutation)(MessageContainer)

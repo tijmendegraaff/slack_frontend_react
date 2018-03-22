@@ -6,9 +6,8 @@ const SendMessageWrapper = ({
     channelName,
     onKeyDown,
     message,
-    messageError,
-    onChange,
-    isSubmitting
+    onChange
+    // isSubmitting
 }) => (
     <div className="input">
         <Input
@@ -28,9 +27,7 @@ SendMessageWrapper.propTypes = {
     channelName: PropTypes.string.isRequired,
     onKeyDown: PropTypes.func.isRequired,
     message: PropTypes.string.isRequired,
-    messageError: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired,
-    isSubmitting: PropTypes.bool.isRequired
+    onChange: PropTypes.func.isRequired
 }
 
 export default SendMessageWrapper
