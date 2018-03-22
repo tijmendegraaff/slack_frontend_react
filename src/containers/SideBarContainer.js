@@ -73,12 +73,10 @@ class SideBarContainer extends Component {
                 })
             })
             .catch((err) => {
-                console.log(err)
                 const errors = {}
                 err.graphQLErrors.forEach(({ key, message }) => {
                     errors[`${camelCase(key)}Error`] = message[0]
                 })
-                console.log(err.graphQLErrors)
                 this.setState({ isSubmitting: false })
             })
     }
@@ -108,6 +106,7 @@ class SideBarContainer extends Component {
                 history.push(`/dashboard/${currentTeam.id}/${res.data.createChannel.id}`)
             })
             .catch((err) => {
+                // eslint-disable-next-line
                 console.log(err)
                 this.setState({ isSubmitting: false })
             })
