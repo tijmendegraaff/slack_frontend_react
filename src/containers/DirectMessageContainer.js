@@ -4,7 +4,7 @@ import { graphql, compose } from 'react-apollo'
 import { SendMessageWrapper, MessagesWrapper } from '../components'
 import createDirectMessageMutation from '../graphql/mutations/createDirectMessageMutation'
 import directMessagesQuery from '../graphql/queries/directMessageQuery'
-// import newChannelMessageSubscription from '../graphql/subscriptions/newChannelMessageSubscription'
+// import newDirectMessageSubscription from '../graphql/subscriptions/newDirectMessageSubscription'
 
 const ENTER_KEY = 13
 

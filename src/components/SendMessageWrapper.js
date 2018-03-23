@@ -29,7 +29,8 @@ SendMessageWrapper.propTypes = {
     channelName: PropTypes.string.isRequired,
     onKeyDown: PropTypes.func.isRequired,
     message: PropTypes.string.isRequired,
-    onChange: PropTypes.func.isRequired
+    onChange: PropTypes.func.isRequired,
+    name: PropTypes.string.isRequired
 }
 
 export default SendMessageWrapper
