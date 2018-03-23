@@ -33,17 +33,8 @@ class CreateTeamPage extends Component {
                         name: teamName
                     }
                 }
-                // refetchQueries: [`currentUser`]
-                // update: (proxy, { data: { createTeam } }) => {
-                //     const data = proxy.readQuery({ query: myTeamsQuery })
-                //     console.log(data)
-                // data.myTeams.push(createTeam)
-                // proxy.writeQuery({ query: myTeamsQuery, data })
-                // }
             })
             .then((res) => {
-                // await
-                // TODO first team you make causes redirect to mallfunction
                 console.log(res)
                 this.props.history.push(`/dashboard/${res.data.createTeam.id}`)
             })
