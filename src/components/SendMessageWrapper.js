@@ -6,13 +6,15 @@ const SendMessageWrapper = ({
     channelName,
     onKeyDown,
     message,
-    onChange
+    onChange,
+    name
     // isSubmitting
 }) => (
+    // console.log(this.props)
     <div className="input">
         <Input
             // disable submitting if already submitting
-            name="message"
+            name={name}
             onChange={onChange}
             onKeyDown={onKeyDown}
             value={message}
