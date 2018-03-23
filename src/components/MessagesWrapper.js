@@ -15,7 +15,9 @@ const MessagesWrapper = ({ messages }) => {
                         <Comment key={`message-${message.id}`}>
                             <Comment.Avatar src={avatar} />
                             <Comment.Content>
-                                <Comment.Author as="a">{message.user.userName}</Comment.Author>
+                                <Comment.Author as="a">
+                                    {message.user ? message.user.userName : null}
+                                </Comment.Author>
                                 <Comment.Metadata>
                                     <div>{message.insertedAt}</div>
                                 </Comment.Metadata>
