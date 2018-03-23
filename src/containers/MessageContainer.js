@@ -87,6 +87,7 @@ class MessageContainer extends Component {
     }
 
     render() {
+        console.log(this.props)
         const { channelName, data: { messages } } = this.props
         const { message, messageError, isSubmitting } = this.state
         if (!messages) {
@@ -102,6 +103,7 @@ class MessageContainer extends Component {
                 isSubmitting={isSubmitting}
                 onKeyDown={this.onKeyDown}
                 onChange={this.onChange}
+                name="message"
             />
         ]
     }
