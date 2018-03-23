@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Comment } from 'semantic-ui-react'
+import avatar from '../assets/images/avatar.png'
 
 const MessagesWrapper = ({ messages }) => {
     if (messages.length === 0) {
@@ -12,7 +13,7 @@ const MessagesWrapper = ({ messages }) => {
                 <Comment.Group>
                     {messages.map(message => (
                         <Comment key={`message-${message.id}`}>
-                            <Comment.Avatar src="/assets/images/avatar/small/matt.jpg" />
+                            <Comment.Avatar src={avatar} />
                             <Comment.Content>
                                 <Comment.Author as="a">{message.user.userName}</Comment.Author>
                                 <Comment.Metadata>

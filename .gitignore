@@ -5,3 +5,4 @@ public/dist/
 .env.production
 yarn-error.log
 .vscode
+.DS_Store

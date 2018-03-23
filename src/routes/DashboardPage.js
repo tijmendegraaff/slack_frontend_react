@@ -67,6 +67,6 @@ DashboardPage.propTypes = {
 }
 
 export default compose(
-    graphql(myTeamsQuery, { name: 'myTeamsQuery' }),
+    graphql(myTeamsQuery, { name: 'myTeamsQuery', options: { fetchPolicy: 'network-only' } }),
     graphql(currentUserQuery, { name: 'currentUserQuery' })
 )(DashboardPage)
