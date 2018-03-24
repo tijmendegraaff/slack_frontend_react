@@ -6,6 +6,7 @@ import SendMessageWrapper from './SendMessageWrapper'
 import AddChannelModal from './AddChannelModal'
 import AddUsersToTeamModal from './AddUsersToTeamModal'
 import MessagesWrapper from './MessagesWrapper'
+import DirectMessageModal from './DirectMessageModal'
 
 export {
     AppWrapper,
@@ -15,5 +16,6 @@ export {
     SendMessageWrapper,
     AddChannelModal,
     AddUsersToTeamModal,
+    DirectMessageModal,
     MessagesWrapper
 }

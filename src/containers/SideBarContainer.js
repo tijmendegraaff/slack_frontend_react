@@ -3,7 +3,13 @@ import { graphql, compose } from 'react-apollo'
 import PropTypes from 'prop-types'
 import findIndex from 'lodash/findIndex'
 import camelCase from 'lodash/camelCase'
-import { Teams, Channels, AddChannelModal, AddUsersToTeamModal } from '../components'
+import {
+    Teams,
+    Channels,
+    AddChannelModal,
+    AddUsersToTeamModal,
+    DirectMessageModal
+} from '../components'
 import myTeamsQuery from '../graphql/queries/myTeamsQuery'
 import createChannelMutation from '../graphql/mutations/createChannelMutation'
 import addUserToTeamMutation from '../graphql/mutations/addUserToTeamMuation'
@@ -14,11 +20,13 @@ class SideBarContainer extends Component {
         this.state = {
             openAddChannelModal: false,
             openAddUsersToTeamModal: false,
+            openDirectMessageModal: false,
             isSubmitting: false,
             channelName: '',
             channelNameError: '',
             addUserEmail: '',
             addUserEmailError: '',
+            directMessageUser: {},
             isPublic: true
         }
         this.onChange = this.onChange.bind(this)
@@ -27,6 +35,8 @@ class SideBarContainer extends Component {
         this.toggleAddUsersToTeamModal = this.toggleAddUsersToTeamModal.bind(this)
         this.handleChannelSubmit = this.handleChannelSubmit.bind(this)
         this.handleAddUsersToTeamSubmit = this.handleAddUsersToTeamSubmit.bind(this)
+        this.toggleDirectMessageModal = this.toggleDirectMessageModal.bind(this)
+        this.handleAddDirectMessage = this.handleAddDirectMessage.bind(this)
     }
 
     onChange(e) {
@@ -50,6 +60,19 @@ class SideBarContainer extends Component {
             openAddUsersToTeamModal: !state.openAddUsersToTeamModal
         }))
         this.setState({ addUserEmail: '' })
+    }
+
+    toggleDirectMessageModal(e) {
+        e.preventDefault()
+        this.setState(state => ({
+            openDirectMessageModal: !state.openDirectMessageModal
+        }))
+        // this.setState({ addUserEmail: '' })
+        console.log('toggleDirectMessageModal clicked')
+    }
+
+    handleAddDirectMessage() {
+        console.log('user added to directly message')
     }
 
     async handleAddUsersToTeamSubmit() {
@@ -137,6 +160,7 @@ class SideBarContainer extends Component {
                 users={[{ id: 1, name: 'slackbot' }, { id: 2, name: 'Tijmen' }]}
                 toggleAdChannelModal={this.toggleAdChannelModal}
                 toggleAddUsersToTeamModal={this.toggleAddUsersToTeamModal}
+                toggleDirectMessageModal={this.toggleDirectMessageModal}
                 currentUser={currentUser}
                 owner={currentTeam.owner.id}
             />,
@@ -160,6 +184,17 @@ class SideBarContainer extends Component {
                 handleAddUsersToTeamSubmit={this.handleAddUsersToTeamSubmit}
                 isSubmitting={this.state.isSubmitting}
                 key="add-users-to-channel-modal"
+            />,
+            <DirectMessageModal
+                teamId={currentTeam.id}
+                open={this.state.openDirectMessageModal}
+                toggleDirectMessageModal={this.toggleDirectMessageModal}
+                directMessageUser={this.state.directMessageUser}
+                onChange={this.onChange}
+                handleAddDirectMessage={this.handleAddDirectMessage}
+                isSubmitting={this.state.isSubmitting}
+                key="add-users-to-direct-message-modal"
+                members={this.props.currentTeam.members}
             />
         ]
     }
