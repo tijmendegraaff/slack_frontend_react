@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { graphql, compose } from 'react-apollo'
 import PropTypes from 'prop-types'
-import { Redirect } from 'react-router-dom'
 import findIndex from 'lodash/findIndex'
 import myTeamsQuery from '../graphql/queries/myTeamsQuery'
 import currentUserQuery from '../graphql/queries/currentUserQuery'
@@ -15,6 +14,7 @@ class DirectMessagePage extends Component {
     }
 
     render() {
+        console.log(this.props)
         // eslint-disable-next-line
         const {
             match: { params: { teamId, userId } },

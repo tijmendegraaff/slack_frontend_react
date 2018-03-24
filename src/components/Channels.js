@@ -27,6 +27,7 @@ const Channels = ({
     toggleAdChannelModal,
     teamId,
     toggleAddUsersToTeamModal,
+    toggleDirectMessageModal,
     currentUser,
     owner
 }) => (
@@ -35,7 +36,7 @@ const Channels = ({
         <h1 className="channel-username">{username}</h1>
         <ul className="channel-list">
             <li className="channel-list-header">
-                    Channels{' '}
+                Channels{' '}
                 {currentUser.id === owner && (
                     <Icon name="add circle" onClick={toggleAdChannelModal} />
                 )}
@@ -44,7 +45,7 @@ const Channels = ({
         </ul>
         <ul className="channel-list">
             <li className="channel-list-header">
-                    Users <Icon name="add circle" />
+                Users <Icon name="add circle" onClick={toggleDirectMessageModal} />
             </li>
             {users.map(user)}
         </ul>
@@ -65,6 +66,7 @@ Channels.propTypes = {
     users: PropTypes.array.isRequired,
     toggleAdChannelModal: PropTypes.func.isRequired,
     toggleAddUsersToTeamModal: PropTypes.func.isRequired,
+    toggleDirectMessageModal: PropTypes.func.isRequired,
     teamId: PropTypes.string.isRequired,
     currentUser: PropTypes.object.isRequired,
     owner: PropTypes.string.isRequired
