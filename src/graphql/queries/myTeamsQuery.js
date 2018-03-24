@@ -13,6 +13,11 @@ export default gql`
             owner {
                 id
             }
+            members {
+                id
+                userName
+                email
+            }
         }
     }
 `
