@@ -13,6 +13,7 @@ import {
 import myTeamsQuery from '../graphql/queries/myTeamsQuery'
 import createChannelMutation from '../graphql/mutations/createChannelMutation'
 import addUserToTeamMutation from '../graphql/mutations/addUserToTeamMuation'
+import createDirectMessageChannelMutation from '../graphql/mutations/createDirectMessageChannelMutation'
 
 class SideBarContainer extends Component {
     constructor(props) {
@@ -24,9 +25,10 @@ class SideBarContainer extends Component {
             isSubmitting: false,
             channelName: '',
             channelNameError: '',
+            channelMembers: [],
             addUserEmail: '',
             addUserEmailError: '',
-            directMessageUser: {},
+            directMessageUsers: [],
             isPublic: true
         }
         this.onChange = this.onChange.bind(this)
@@ -37,6 +39,8 @@ class SideBarContainer extends Component {
         this.handleAddUsersToTeamSubmit = this.handleAddUsersToTeamSubmit.bind(this)
         this.toggleDirectMessageModal = this.toggleDirectMessageModal.bind(this)
         this.handleAddDirectMessage = this.handleAddDirectMessage.bind(this)
+        this.handleToggleCheckbox = this.handleToggleCheckbox.bind(this)
+        this.handleAddChannelMembers = this.handleAddChannelMembers.bind(this)
     }
 
     onChange(e) {
@@ -51,7 +55,7 @@ class SideBarContainer extends Component {
         this.setState(state => ({
             openAddChannelModal: !state.openAddChannelModal
         }))
-        this.setState({ channelName: '' })
+        this.setState({ channelName: '', isPublic: true, channelMembers: [] })
     }
 
     toggleAddUsersToTeamModal(e) {
@@ -73,6 +77,19 @@ class SideBarContainer extends Component {
 
     handleAddDirectMessage() {
         console.log('user added to directly message')
+    }
+
+    async handleToggleCheckbox(e, { checked }) {
+        // console.log('checkbox toggled ', this.state.isPublic)
+        // console.log(checked)
+        await this.setState({ isPublic: checked })
+        console.log('is public is set to: ', this.state.isPublic)
+    }
+
+    async handleAddChannelMembers(e, { value }) {
+        console.log(value)
+        await this.setState({ channelMembers: value })
+        console.log(this.state.channelMembers)
     }
 
     async handleAddUsersToTeamSubmit() {
@@ -106,7 +123,7 @@ class SideBarContainer extends Component {
 
     async handleChannelSubmit() {
         this.setState({ isSubmitting: true })
-        const { channelName, isPublic } = this.state
+        const { channelName, isPublic, channelMembers } = this.state
         const { currentTeam, history } = this.props
         await this.props
             .createChannelMutation({
@@ -114,9 +131,11 @@ class SideBarContainer extends Component {
                     input: {
                         name: channelName,
                         isPublic,
-                        teamId: currentTeam.id
+                        teamId: currentTeam.id,
+                        members: channelMembers
                     }
                 },
+
                 update: (proxy, { data: { createChannel } }) => {
                     const data = proxy.readQuery({ query: myTeamsQuery })
                     const currentTeamIndex = findIndex(data.myTeams, ['id', currentTeam.id])
@@ -125,7 +144,14 @@ class SideBarContainer extends Component {
                 }
             })
             .then((res) => {
-                this.setState({ isSubmitting: false, openAddChannelModal: false, channelName: '' })
+                console.log(res)
+                this.setState({
+                    isSubmitting: false,
+                    openAddChannelModal: false,
+                    channelName: '',
+                    isPublic: true,
+                    channelMembers: []
+                })
                 history.push(`/dashboard/${currentTeam.id}/${res.data.createChannel.id}`)
             })
             .catch((err) => {
@@ -168,10 +194,17 @@ class SideBarContainer extends Component {
                 open={this.state.openAddChannelModal}
                 toggleAdChannelModal={this.toggleAdChannelModal}
                 channelName={this.state.channelName}
+                isPublic={this.state.isPublic}
                 channelNameError={this.state.channelNameError}
                 onChange={this.onChange}
+                handleToggleCheckbox={this.handleToggleCheckbox}
                 handleChannelSubmit={this.handleChannelSubmit}
+                handleAddChannelMembers={this.handleAddChannelMembers}
+                members={this.props.currentTeam.members}
+                channelMembers={this.state.channelMembers}
+                currentUserId={currentUser.id}
                 isSubmitting={this.state.isSubmitting}
+                placeholder="Add your members!"
                 key="add-channel-modal"
             />,
             <AddUsersToTeamModal
@@ -189,7 +222,7 @@ class SideBarContainer extends Component {
                 teamId={currentTeam.id}
                 open={this.state.openDirectMessageModal}
                 toggleDirectMessageModal={this.toggleDirectMessageModal}
-                directMessageUser={this.state.directMessageUser}
+                directMessageUsers={this.state.directMessageUsers}
                 onChange={this.onChange}
                 handleAddDirectMessage={this.handleAddDirectMessage}
                 isSubmitting={this.state.isSubmitting}
