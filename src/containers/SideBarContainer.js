@@ -13,7 +13,7 @@ import {
 import myTeamsQuery from '../graphql/queries/myTeamsQuery'
 import createChannelMutation from '../graphql/mutations/createChannelMutation'
 import addUserToTeamMutation from '../graphql/mutations/addUserToTeamMuation'
-import createDirectMessageChannelMutation from '../graphql/mutations/createDirectMessageChannelMutation'
+// import createDirectMessageChannelMutation from '../graphql/mutations/createDirectMessageChannelMutation'
 
 class SideBarContainer extends Component {
     constructor(props) {
@@ -21,26 +21,27 @@ class SideBarContainer extends Component {
         this.state = {
             openAddChannelModal: false,
             openAddUsersToTeamModal: false,
-            openDirectMessageModal: false,
+            openAddUsersToDirectChannelModal: false,
             isSubmitting: false,
+            directChannelMembers: [],
+            channelMembers: [],
             channelName: '',
             channelNameError: '',
-            channelMembers: [],
+            isPublic: true,
             addUserEmail: '',
-            addUserEmailError: '',
-            directMessageUsers: [],
-            isPublic: true
+            addUserEmailError: ''
         }
         this.onChange = this.onChange.bind(this)
         this.addTeam = this.addTeam.bind(this)
         this.toggleAdChannelModal = this.toggleAdChannelModal.bind(this)
         this.toggleAddUsersToTeamModal = this.toggleAddUsersToTeamModal.bind(this)
+        this.toggleDirectMessageModal = this.toggleDirectMessageModal.bind(this)
+        this.handleToggleCheckbox = this.handleToggleCheckbox.bind(this)
+        this.handleAddDirectMessageMembers = this.handleAddDirectMessageMembers.bind(this)
         this.handleChannelSubmit = this.handleChannelSubmit.bind(this)
         this.handleAddUsersToTeamSubmit = this.handleAddUsersToTeamSubmit.bind(this)
-        this.toggleDirectMessageModal = this.toggleDirectMessageModal.bind(this)
-        this.handleAddDirectMessage = this.handleAddDirectMessage.bind(this)
-        this.handleToggleCheckbox = this.handleToggleCheckbox.bind(this)
         this.handleAddChannelMembers = this.handleAddChannelMembers.bind(this)
+        this.handleDirectMessageSubmit = this.handleDirectMessageSubmit.bind(this)
     }
 
     onChange(e) {
@@ -69,27 +70,27 @@ class SideBarContainer extends Component {
     toggleDirectMessageModal(e) {
         e.preventDefault()
         this.setState(state => ({
-            openDirectMessageModal: !state.openDirectMessageModal
+            openAddUsersToDirectChannelModal: !state.openAddUsersToDirectChannelModal
         }))
-        // this.setState({ addUserEmail: '' })
-        console.log('toggleDirectMessageModal clicked')
+        this.setState({ directChannelMembers: [] })
     }
 
-    handleAddDirectMessage() {
-        console.log('user added to directly message')
+    async handleAddDirectMessageMembers(e, { value }) {
+        await this.setState({ directChannelMembers: value })
+        console.log(this.state.directChannelMembers)
     }
 
     async handleToggleCheckbox(e, { checked }) {
-        // console.log('checkbox toggled ', this.state.isPublic)
-        // console.log(checked)
         await this.setState({ isPublic: checked })
-        console.log('is public is set to: ', this.state.isPublic)
     }
 
     async handleAddChannelMembers(e, { value }) {
-        console.log(value)
         await this.setState({ channelMembers: value })
         console.log(this.state.channelMembers)
+    }
+
+    async handleDirectMessageSubmit() {
+        console.log(this.state.directChannelMembers)
     }
 
     async handleAddUsersToTeamSubmit() {
@@ -168,6 +169,9 @@ class SideBarContainer extends Component {
     render() {
         // eslint-disable-next-line
         const { myTeams, currentTeam, currentUser } = this.props
+        if (!myTeams) {
+            return null
+        }
         return [
             <Teams
                 key="team-sidebar-component"
@@ -191,7 +195,7 @@ class SideBarContainer extends Component {
                 owner={currentTeam.owner.id}
             />,
             <AddChannelModal
-                open={this.state.openAddChannelModal}
+                openAddChannelModal={this.state.openAddChannelModal}
                 toggleAdChannelModal={this.toggleAdChannelModal}
                 channelName={this.state.channelName}
                 isPublic={this.state.isPublic}
@@ -219,15 +223,16 @@ class SideBarContainer extends Component {
                 key="add-users-to-channel-modal"
             />,
             <DirectMessageModal
+                currentUserId={currentUser.id}
                 teamId={currentTeam.id}
-                open={this.state.openDirectMessageModal}
+                open={this.state.openAddUsersToDirectChannelModal}
                 toggleDirectMessageModal={this.toggleDirectMessageModal}
-                directMessageUsers={this.state.directMessageUsers}
-                onChange={this.onChange}
-                handleAddDirectMessage={this.handleAddDirectMessage}
+                directChannelMembers={this.state.directChannelMembers}
+                handleAddDirectMessageMembers={this.handleAddDirectMessageMembers}
                 isSubmitting={this.state.isSubmitting}
                 key="add-users-to-direct-message-modal"
                 members={this.props.currentTeam.members}
+                handleDirectMessageSubmit={this.handleDirectMessageSubmit}
             />
         ]
     }

@@ -9,9 +9,7 @@ const MultiSelectUserInput = ({
     members,
     currentUserId
 }) => {
-    console.log(members
-        .filter(member => member.id !== currentUserId)
-        .map(member => ({ key: member.userName, value: member.id, text: member.userName })))
+    console.log(selectedMembers)
     return (
         <Dropdown
             value={selectedMembers}
@@ -23,7 +21,7 @@ const MultiSelectUserInput = ({
             selection
             options={members
                 .filter(member => member.id !== currentUserId)
-                .map(member => ({ key: member.userName, value: member.id, text: member.userName }))}
+                .map(member => ({ key: member.id, value: member.id, text: member.userName }))}
         />
     )
 }

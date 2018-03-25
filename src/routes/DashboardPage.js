@@ -38,7 +38,7 @@ class DashboardPage extends Component {
         const channelIndex = channelId ? findIndex(currentTeam.channels, ['id', channelId]) : 0
         const currentChannel =
             channelIndex === -1 ? currentTeam.channels[0] : currentTeam.channels[channelIndex]
-
+        console.log(this.props)
         return (
             <AppWrapper>
                 <SideBarContainer

@@ -1,9 +1,10 @@
 import React from 'react'
 import { Modal, Header, Input, Form, Button, Checkbox } from 'semantic-ui-react'
+import PropTypes from 'prop-types'
 import { MultiSelectUserInput } from '../components'
 
 const AddChannelModal = ({
-    open,
+    openAddChannelModal,
     toggleAdChannelModal,
     channelName,
     onChange,
@@ -17,7 +18,7 @@ const AddChannelModal = ({
     channelMembers,
     handleAddChannelMembers
 }) => (
-    <Modal open={open} className="modal-container" onClose={toggleAdChannelModal}>
+    <Modal open={openAddChannelModal} className="modal-container" onClose={toggleAdChannelModal}>
         <Modal.Header>Add a channel!</Modal.Header>
         <Modal.Content>
             <Header>Please enter a channelName</Header>
