@@ -1,6 +1,7 @@
 import React from 'react'
 import { Modal, Header, Form, Button } from 'semantic-ui-react'
 import Downshift from 'downshift'
+import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
 
 const DirectMessageModal = ({
@@ -8,9 +9,9 @@ const DirectMessageModal = ({
     toggleDirectMessageModal,
     handleAddDirectMessage,
     teamId,
-    directMessageUser,
     members,
-    history
+    history,
+    directMessageUsers
 }) => (
     <Modal open={open} className="modal-container" onClose={toggleDirectMessageModal}>
         <Modal.Header>Who do you want to send a private message too?</Modal.Header>
@@ -18,13 +19,6 @@ const DirectMessageModal = ({
             <Header>Search for a user</Header>
             <Form>
                 <Form.Field>
-                    {/* <Input
-                        placeholder="username"
-                        name="username"
-                        onChange={onChange}
-                        value={directMessageUser ? directMessageUser.userName : ''}
-                        fluid
-                    /> */}
                     <Downshift
                         onChange={e => history.push(`/dashboard/${teamId}/directMessage/${e.id}`)}
                         render={({
@@ -81,5 +75,15 @@ const DirectMessageModal = ({
         </Modal.Content>
     </Modal>
 )
+
+DirectMessageModal.propTypes = {
+    open: PropTypes.bool.isRequired,
+    toggleDirectMessageModal: PropTypes.func.isRequired,
+    teamId: PropTypes.string.isRequired,
+    handleAddDirectMessage: PropTypes.func.isRequired,
+    members: PropTypes.array.isRequired,
+    history: PropTypes.object.isRequired,
+    directMessageUsers: PropTypes.array.isRequired
+}
 
 export default withRouter(DirectMessageModal)

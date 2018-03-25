@@ -1,5 +1,6 @@
 import React from 'react'
-import { Modal, Header, Input, Form, Button } from 'semantic-ui-react'
+import { Modal, Header, Input, Form, Button, Checkbox } from 'semantic-ui-react'
+import { MultiSelectUserInput } from '../components'
 
 const AddChannelModal = ({
     open,
@@ -7,7 +8,14 @@ const AddChannelModal = ({
     channelName,
     onChange,
     handleChannelSubmit,
-    isSubmitting
+    isSubmitting,
+    isPublic,
+    handleToggleCheckbox,
+    members,
+    currentUserId,
+    placeholder,
+    channelMembers,
+    handleAddChannelMembers
 }) => (
     <Modal open={open} className="modal-container" onClose={toggleAdChannelModal}>
         <Modal.Header>Add a channel!</Modal.Header>
@@ -23,6 +31,30 @@ const AddChannelModal = ({
                         fluid
                     />
                 </Form.Field>
+                <Form.Field>
+                    <Checkbox
+                        toggle
+                        label={
+                            isPublic
+                                ? 'This channel is a public channel. Anyone can join'
+                                : 'This channel will be private. You need to invite others to join'
+                        }
+                        checked={isPublic}
+                        onChange={handleToggleCheckbox}
+                    />
+                </Form.Field>
+                {isPublic ? null : (
+                    <Form.Field>
+                        <MultiSelectUserInput
+                            selectedMembers={channelMembers}
+                            members={members}
+                            currentUserId={currentUserId}
+                            placeholder={placeholder}
+                            handleChange={handleAddChannelMembers}
+                        />
+                    </Form.Field>
+                )}
+
                 <Form.Group widths="equal">
                     <Button disabled={isSubmitting} onClick={handleChannelSubmit} fluid>
                         Create Channel
