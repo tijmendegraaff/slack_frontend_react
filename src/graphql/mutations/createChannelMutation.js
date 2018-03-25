@@ -6,6 +6,11 @@ export default gql`
             id
             name
             isPublic
+            isDirectMessageChannel
+            members {
+                id
+                userName
+            }
         }
     }
 `
