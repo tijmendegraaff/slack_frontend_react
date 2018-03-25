@@ -7,6 +7,7 @@ import AddChannelModal from './AddChannelModal'
 import AddUsersToTeamModal from './AddUsersToTeamModal'
 import MessagesWrapper from './MessagesWrapper'
 import DirectMessageModal from './DirectMessageModal'
+import MultiSelectUserInput from './MultiSelectUserInput'
 
 export {
     AppWrapper,
@@ -17,5 +18,6 @@ export {
     AddChannelModal,
     AddUsersToTeamModal,
     DirectMessageModal,
-    MessagesWrapper
+    MessagesWrapper,
+    MultiSelectUserInput
 }
