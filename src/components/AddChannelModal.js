@@ -74,7 +74,7 @@ AddChannelModal.propTypes = {
     onChange: PropTypes.func.isRequired,
     channelName: PropTypes.string.isRequired,
     isPublic: PropTypes.bool.isRequired,
-    handleToggleCheckbox: PropTypes.bool.isRequired,
+    handleToggleCheckbox: PropTypes.func.isRequired,
     channelMembers: PropTypes.array.isRequired,
     members: PropTypes.array.isRequired,
     currentUserId: PropTypes.string.isRequired,
@@ -82,7 +82,7 @@ AddChannelModal.propTypes = {
     handleAddChannelMembers: PropTypes.func.isRequired,
     handleChannelSubmit: PropTypes.func.isRequired,
     toggleAdChannelModal: PropTypes.func.isRequired,
-    isSubmitting: PropTypes.func.isRequired
+    isSubmitting: PropTypes.bool.isRequired
 }
 
 export default AddChannelModal

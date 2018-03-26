@@ -3,16 +3,18 @@ import PropTypes from 'prop-types'
 import { Modal, Header, Input, Form, Button } from 'semantic-ui-react'
 
 const AddUsersToTeamModal = ({
-    open,
+    openAddUsersToTeamModal,
     toggleAddUsersToTeamModal,
     addUserEmail,
-    addUserEmailError,
     onChange,
     handleAddUsersToTeamSubmit,
-    isSubmitting,
-    teamId
+    isSubmitting
 }) => (
-    <Modal open={open} className="modal-container" onClose={toggleAddUsersToTeamModal}>
+    <Modal
+        open={openAddUsersToTeamModal}
+        className="modal-container"
+        onClose={toggleAddUsersToTeamModal}
+    >
         <Modal.Header>Add a users to this team!</Modal.Header>
         <Modal.Content>
             <Header>Add users to your team!</Header>
@@ -40,19 +42,12 @@ const AddUsersToTeamModal = ({
 )
 
 AddUsersToTeamModal.propTypes = {
-    openAddChannelModal: PropTypes.bool.isRequired,
+    openAddUsersToTeamModal: PropTypes.bool.isRequired,
+    toggleAddUsersToTeamModal: PropTypes.func.isRequired,
+    addUserEmail: PropTypes.string.isRequired,
     onChange: PropTypes.func.isRequired,
-    channelName: PropTypes.string.isRequired,
-    isPublic: PropTypes.bool.isRequired,
-    handleToggleCheckbox: PropTypes.bool.isRequired,
-    channelMembers: PropTypes.array.isRequired,
-    members: PropTypes.array.isRequired,
-    currentUserId: PropTypes.string.isRequired,
-    placeholder: PropTypes.string.isRequired,
-    handleAddChannelMembers: PropTypes.func.isRequired,
-    handleChannelSubmit: PropTypes.func.isRequired,
-    toggleAdChannelModal: PropTypes.func.isRequired,
-    isSubmitting: PropTypes.func.isRequired
+    handleAddUsersToTeamSubmit: PropTypes.func.isRequired,
+    isSubmitting: PropTypes.bool.isRequired
 }
 
 export default AddUsersToTeamModal

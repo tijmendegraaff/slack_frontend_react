@@ -13,7 +13,7 @@ import {
 import myTeamsQuery from '../graphql/queries/myTeamsQuery'
 import createChannelMutation from '../graphql/mutations/createChannelMutation'
 import addUserToTeamMutation from '../graphql/mutations/addUserToTeamMuation'
-// import createDirectMessageChannelMutation from '../graphql/mutations/createDirectMessageChannelMutation'
+import createDirectMessageChannelMutation from '../graphql/mutations/createDirectMessageChannelMutation'
 
 class SideBarContainer extends Component {
     constructor(props) {
@@ -28,8 +28,7 @@ class SideBarContainer extends Component {
             channelName: '',
             channelNameError: '',
             isPublic: true,
-            addUserEmail: '',
-            addUserEmailError: ''
+            addUserEmail: ''
         }
         this.onChange = this.onChange.bind(this)
         this.addTeam = this.addTeam.bind(this)
@@ -90,7 +89,38 @@ class SideBarContainer extends Component {
     }
 
     async handleDirectMessageSubmit() {
-        console.log(this.state.directChannelMembers)
+        this.setState({ isSubmitting: true })
+        const { currentTeam: { id }, history } = this.props
+        const { directChannelMembers } = this.state
+        const name = directChannelMembers.map(u => u.username).join(', ')
+        await this.props
+            .createDirectMessageChannelMutation({
+                variables: {
+                    input: {
+                        name,
+                        teamId: id,
+                        members: directChannelMembers
+                    }
+                }
+            })
+            .then((res) => {
+                console.log(res)
+                this.setState({
+                    isSubmitting: false,
+                    openAddUsersToDirectChannelModal: false,
+                    directChannelMembers: []
+                })
+                history.push(`/dashboard/${id}/${res.data.createDirectMessageChannel.id}`)
+            })
+            .catch((err) => {
+                console.log(err)
+                const errors = {}
+                err.graphQLErrors.forEach(({ key, message }) => {
+                    errors[`${camelCase(key)}Error`] = message[0]
+                })
+                console.log(errors)
+                this.setState({ isSubmitting: false })
+            })
     }
 
     async handleAddUsersToTeamSubmit() {
@@ -213,7 +243,7 @@ class SideBarContainer extends Component {
             />,
             <AddUsersToTeamModal
                 teamId={currentTeam.id}
-                open={this.state.openAddUsersToTeamModal}
+                openAddUsersToTeamModal={this.state.openAddUsersToTeamModal}
                 toggleAddUsersToTeamModal={this.toggleAddUsersToTeamModal}
                 addUserEmail={this.state.addUserEmail}
                 addUserEmailError={this.state.addUserEmailError}
@@ -239,13 +269,15 @@ class SideBarContainer extends Component {
 }
 
 SideBarContainer.propTypes = {
-    createChannelMutation: PropTypes.func.isRequired,
     currentTeam: PropTypes.object.isRequired,
+    createChannelMutation: PropTypes.func.isRequired,
+    createDirectMessageChannelMutation: PropTypes.func.isRequired,
     addUserToTeamMutation: PropTypes.func.isRequired,
     history: PropTypes.object.isRequired
 }
 
 export default compose(
+    graphql(createDirectMessageChannelMutation, { name: 'createDirectMessageChannelMutation' }),
     graphql(createChannelMutation, { name: 'createChannelMutation' }),
     graphql(addUserToTeamMutation, { name: 'addUserToTeamMutation' })
 )(SideBarContainer)
