@@ -28,7 +28,8 @@ class SideBarContainer extends Component {
             channelName: '',
             channelNameError: '',
             isPublic: true,
-            addUserEmail: ''
+            addUserEmail: '',
+            addUserToTeamError: ''
         }
         this.onChange = this.onChange.bind(this)
         this.addTeam = this.addTeam.bind(this)
@@ -92,12 +93,11 @@ class SideBarContainer extends Component {
         this.setState({ isSubmitting: true })
         const { currentTeam: { id }, history } = this.props
         const { directChannelMembers } = this.state
-        const name = directChannelMembers.map(u => u.username).join(', ')
+
         await this.props
             .createDirectMessageChannelMutation({
                 variables: {
                     input: {
-                        name,
                         teamId: id,
                         members: directChannelMembers
                     }
@@ -144,11 +144,9 @@ class SideBarContainer extends Component {
                 })
             })
             .catch((err) => {
-                const errors = {}
-                err.graphQLErrors.forEach(({ key, message }) => {
-                    errors[`${camelCase(key)}Error`] = message[0]
-                })
-                this.setState({ isSubmitting: false })
+                const addUserToTeamError = err.graphQLErrors[0].message
+                console.log(err.graphQLErrors)
+                this.setState({ isSubmitting: false, addUserToTeamError })
             })
     }
 
@@ -246,7 +244,7 @@ class SideBarContainer extends Component {
                 openAddUsersToTeamModal={this.state.openAddUsersToTeamModal}
                 toggleAddUsersToTeamModal={this.toggleAddUsersToTeamModal}
                 addUserEmail={this.state.addUserEmail}
-                addUserEmailError={this.state.addUserEmailError}
+                addUserToTeamError={this.state.addUserToTeamError}
                 onChange={this.onChange}
                 handleAddUsersToTeamSubmit={this.handleAddUsersToTeamSubmit}
                 isSubmitting={this.state.isSubmitting}
