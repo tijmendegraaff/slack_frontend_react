@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 
 // eslint-disable-next-line
-const team = ({ id, name }) => (
-    <Link key={`team-${id}`} to={`/dashboard/${id}`}>
+const team = ({ id, name, channels }) => (
+    <Link key={`team-${id}`} to={`/dashboard/${id}/${channels[0].id}`}>
         <li className="team-list-item">{name.charAt(0).toUpperCase()}</li>
     </Link>
 )

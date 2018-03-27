@@ -27,6 +27,7 @@ class LoginPage extends Component {
 
     async onSumbit() {
         const { email, password } = this.state
+        const { history } = this.props
         await this.props
             .mutate({
                 variables: {
@@ -38,7 +39,12 @@ class LoginPage extends Component {
             })
             .then((res) => {
                 localStorage.setItem('token', res.data.createSession.token)
-                this.props.history.push('/dashboard')
+                if (!res.data.createSession.user.teams[0]) {
+                    history.push('/create-team')
+                }
+                history.push(`/dashboard/${res.data.createSession.user.teams[0].id}/${
+                    res.data.createSession.user.teams[0].channels[0].id
+                }`)
             })
             .catch((err) => {
                 const { message } = err.graphQLErrors[0]

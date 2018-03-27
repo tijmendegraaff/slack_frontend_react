@@ -35,8 +35,7 @@ class CreateTeamPage extends Component {
                 }
             })
             .then((res) => {
-                console.log(res)
-                this.props.history.push(`/dashboard/${res.data.createTeam.id}`)
+                this.props.history.push(`/dashboard/${res.data.createTeam.id}/${res.data.createTeam.channels[0].id}`)
             })
             .catch((err) => {
                 console.log(err.graphQLErrors[0].message[0])
