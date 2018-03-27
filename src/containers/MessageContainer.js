@@ -19,29 +19,25 @@ class MessageContainer extends Component {
         this.onKeyDown = this.onKeyDown.bind(this)
         this.onChange = this.onChange.bind(this)
         this.handleMessageSubmit = this.handleMessageSubmit.bind(this)
+        this.subscribeToChannel = this.subscribeToChannel.bind(this)
+    }
+
+    componentDidMount() {
+        this.unsubscribeToChannel = this.subscribeToChannel(this.props.channelId)
     }
 
     componentWillReceiveProps({ channelId }) {
         if (this.props.channelId !== channelId) {
-            if (this.unsubscribe) {
-                this.unsubscribe()
+            if (this.unsubscribeToChannel) {
+                this.unsubscribeToChannel()
             }
-            this.unsubscribe = this.props.data.subscribeToMore({
-                document: newChannelMessageSubscription,
-                variables: {
-                    channelId
-                },
-                updateQuery: (prev, { subscriptionData }) => {
-                    if (!subscriptionData) {
-                        return prev
-                    }
+            this.unsubscribeToChannel = this.subscribeToChannel(channelId)
+        }
+    }
 
-                    return {
-                        ...prev,
-                        messages: [...prev.messages, subscriptionData.data.newChannelMessage]
-                    }
-                }
-            })
+    componentWillUnmount() {
+        if (this.unsubscribeToChannel) {
+            this.unsubscribeToChannel()
         }
     }
 
@@ -56,6 +52,25 @@ class MessageContainer extends Component {
         if (e.keyCode === ENTER_KEY && !this.state.isSubmitting) {
             this.handleMessageSubmit(e)
         }
+    }
+
+    subscribeToChannel(channelId) {
+        return this.props.data.subscribeToMore({
+            document: newChannelMessageSubscription,
+            variables: {
+                channelId
+            },
+            updateQuery: (prev, { subscriptionData }) => {
+                if (!subscriptionData) {
+                    return prev
+                }
+
+                return {
+                    ...prev,
+                    messages: [...prev.messages, subscriptionData.data.newChannelMessage]
+                }
+            }
+        })
     }
 
     async handleMessageSubmit(e) {
@@ -86,7 +101,7 @@ class MessageContainer extends Component {
     }
 
     render() {
-        console.log(this.props.channelId)
+        console.log(this.props)
         const { channelName, data: { messages } } = this.props
         const { message, messageError, isSubmitting } = this.state
         if (!messages) {
