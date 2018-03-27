@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import { Icon } from 'semantic-ui-react'
+import { Icon, Label } from 'semantic-ui-react'
 
 // eslint-disable-next-line
 const channel = ({ id, name }, teamId) => (
@@ -13,17 +13,24 @@ const channel = ({ id, name }, teamId) => (
 const ActiveUserSpan = () => <span className="blue">●</span>
 
 // eslint-disable-next-line
-const user = ({ id, name, active }) => (
-    <li key={`user-${id}`} className="channel-list-item">
-        {!active ? <ActiveUserSpan /> : '○'} {name}
-    </li>
+const directMessageChannel = ({ id, name, active, members }, teamId) => (
+    <Link key={`dm-channel-${id}`} to={`/dashboard/${teamId}/${id}`}>
+        <li className="channel-list-item">
+            {!active ? <ActiveUserSpan /> : '○'}{' '}
+            {members.map(member => (
+                <Label size="mini" key={member.userName}>
+                    {member.userName}
+                </Label>
+            ))}
+        </li>
+    </Link>
 )
 
 const Channels = ({
     teamName,
     username,
     channels,
-    users,
+    directMessageChannels,
     toggleAdChannelModal,
     teamId,
     toggleAddUsersToTeamModal,
@@ -45,9 +52,9 @@ const Channels = ({
         </ul>
         <ul className="channel-list">
             <li className="channel-list-header">
-                Users <Icon name="add circle" onClick={toggleDirectMessageModal} />
+                Direct Messages <Icon name="add circle" onClick={toggleDirectMessageModal} />
             </li>
-            {users.map(user)}
+            {directMessageChannels.map(c => directMessageChannel(c, teamId))}
         </ul>
         {currentUser.id === owner && (
             <div>
@@ -63,7 +70,7 @@ Channels.propTypes = {
     teamName: PropTypes.string.isRequired,
     username: PropTypes.string.isRequired,
     channels: PropTypes.array.isRequired,
-    users: PropTypes.array.isRequired,
+    directMessageChannels: PropTypes.array.isRequired,
     toggleAdChannelModal: PropTypes.func.isRequired,
     toggleAddUsersToTeamModal: PropTypes.func.isRequired,
     toggleDirectMessageModal: PropTypes.func.isRequired,
