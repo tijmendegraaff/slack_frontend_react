@@ -11,31 +11,38 @@ class DashboardPage extends Component {
     constructor(props) {
         super(props)
         this.state = {}
+        this.findCurrentTeam = this.findCurrentTeam.bind(this)
+        this.findCurrentChannel = this.findCurrentChannel.bind(this)
     }
     // TODO check params to see if channel in params is loaded in cache
-    // componentDidMount() {
-    //     const {
-    //         match: { params: { teamId, channelId } },
-    //         history,
-    //         myTeamsQuery: { myTeams }
-    //     } = this.props
-    //     const myTeamsQueryLoading = this.props.myTeamsQuery.loading
-    //     const currentUserQueryLoading = this.props.currentUserQuery.loading
-    //     if (!this.props.myTeamsQuery.loading) {
-    //         if (!teamId || !channelId) {
-    //             history.push(`/dashboard/${myTeams[0].id}/${myTeams[0].channels[0].id}`)
-    //         }
-    //     }
-    // }
+
+    findCurrentTeam() {
+        const { match: { params: { teamId } }, myTeamsQuery: { myTeams } } = this.props
+        if (teamId) {
+            return myTeams[findIndex(myTeams, ['id', teamId])]
+        }
+        return 0
+    }
+
+    findCurrentChannel(currentTeam) {
+        const { match: { params: { channelId } } } = this.props
+        if (channelId) {
+            const channel = currentTeam.channels[findIndex(currentTeam.channels, ['id', channelId])]
+            if (!channel) {
+                const privateChannel =
+                    currentTeam.privateChannels[
+                        findIndex(currentTeam.privateChannels, ['id', channelId])
+                    ]
+                return privateChannel
+            }
+            return channel
+        }
+        return 0
+    }
 
     render() {
         // eslint-disable-next-line
-        const {
-            match: { params: { teamId, channelId } },
-            history,
-            myTeamsQuery: { myTeams },
-            currentUserQuery: { currentUser }
-        } = this.props
+        const { history, myTeamsQuery: { myTeams }, currentUserQuery: { currentUser } } = this.props
         const myTeamsQueryLoading = this.props.myTeamsQuery.loading
         const currentUserQueryLoading = this.props.currentUserQuery.loading
         if (myTeamsQueryLoading || currentUserQueryLoading) {
@@ -45,10 +52,8 @@ class DashboardPage extends Component {
             return history.push('/createTeam')
         }
 
-        const teamIndex = teamId ? findIndex(myTeams, ['id', teamId]) : 0
-        const currentTeam = myTeams[teamIndex]
-        const channelIndex = channelId ? findIndex(currentTeam.channels, ['id', channelId]) : 0
-        const currentChannel = currentTeam.channels[channelIndex]
+        const currentTeam = this.findCurrentTeam()
+        const currentChannel = this.findCurrentChannel(currentTeam)
         return (
             <AppWrapper>
                 <SideBarContainer
