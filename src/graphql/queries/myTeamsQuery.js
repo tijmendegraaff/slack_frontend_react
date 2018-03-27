@@ -9,7 +9,10 @@ export default gql`
                 id
                 name
                 isPublic
-                isDirectMessageChannel
+            }
+            privateChannels {
+                id
+                name
                 members {
                     id
                     userName
