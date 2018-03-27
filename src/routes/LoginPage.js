@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Container, Header, Button, Message, Form } from 'semantic-ui-react'
 import { graphql } from 'react-apollo'
 import PropTypes from 'prop-types'
+import absinthSocketLink from '../absintheSocketLink'
 
 import createSessionMutation from '../graphql/mutations/createSessionMutation'
 
@@ -39,12 +40,7 @@ class LoginPage extends Component {
             })
             .then((res) => {
                 localStorage.setItem('token', res.data.createSession.token)
-                if (!res.data.createSession.user.teams[0]) {
-                    history.push('/create-team')
-                }
-                history.push(`/dashboard/${res.data.createSession.user.teams[0].id}/${
-                    res.data.createSession.user.teams[0].channels[0].id
-                }`)
+                history.push('/dashboard')
             })
             .catch((err) => {
                 const { message } = err.graphQLErrors[0]
@@ -56,6 +52,7 @@ class LoginPage extends Component {
     }
 
     render() {
+        // console.log(absinthSocketLink)
         const {
             email, emailError, password, passwordError
         } = this.state
