@@ -8,7 +8,6 @@ import RegisterPage from './RegisterPage'
 import LoginPage from './LoginPage'
 import CreateTeamPage from './CreateTeamPage'
 import DashboardPage from './DashboardPage'
-import DirectMessagePage from './DirectMessagePage'
 import NotFoundPage from './NotFoundPage'
 
 const isAuthenticated = () => {
@@ -45,11 +44,6 @@ export default () => (
             <Route path="/" exact component={HomePage} />
             <Route path="/register" exact component={RegisterPage} />
             <Route path="/login" exact component={LoginPage} />
-            <PrivateRoute
-                path="/dashboard/:teamId?/directMessage/:userId?"
-                exact
-                component={DirectMessagePage}
-            />
             <PrivateRoute path="/dashboard/:teamId?/:channelId?" exact component={DashboardPage} />
             <PrivateRoute path="/create-team" exact component={CreateTeamPage} />
             <Route component={NotFoundPage} />
