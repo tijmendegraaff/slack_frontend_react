@@ -6,11 +6,9 @@ export default gql`
             id
             content
             insertedAt
-            __typename
             user {
                 id
                 userName
-                __typename
             }
         }
     }
