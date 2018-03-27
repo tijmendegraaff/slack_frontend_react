@@ -75,17 +75,18 @@ class MessageContainer extends Component {
                         }
                     }
                 })
-                .then((res) => {
-                    console.log(res)
+                .then(() => {
                     this.setState({ message: '', isSubmitting: false })
                 })
                 .catch((err) => {
+                    // TODO error handeling
                     console.log(err)
                 })
         }
     }
 
     render() {
+        console.log(this.props.channelId)
         const { channelName, data: { messages } } = this.props
         const { message, messageError, isSubmitting } = this.state
         if (!messages) {

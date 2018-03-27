@@ -10,7 +10,6 @@ const SendMessageWrapper = ({
     name
     // isSubmitting
 }) => (
-    // console.log(this.props)
     <div className="input">
         <Input
             // disable submitting if already submitting
