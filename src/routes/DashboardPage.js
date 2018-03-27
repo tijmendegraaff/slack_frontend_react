@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { graphql, compose } from 'react-apollo'
 import PropTypes from 'prop-types'
-import { Redirect } from 'react-router-dom'
 import findIndex from 'lodash/findIndex'
 import myTeamsQuery from '../graphql/queries/myTeamsQuery'
 import currentUserQuery from '../graphql/queries/currentUserQuery'
@@ -13,6 +12,21 @@ class DashboardPage extends Component {
         super(props)
         this.state = {}
     }
+    // TODO check params to see if channel in params is loaded in cache
+    // componentDidMount() {
+    //     const {
+    //         match: { params: { teamId, channelId } },
+    //         history,
+    //         myTeamsQuery: { myTeams }
+    //     } = this.props
+    //     const myTeamsQueryLoading = this.props.myTeamsQuery.loading
+    //     const currentUserQueryLoading = this.props.currentUserQuery.loading
+    //     if (!this.props.myTeamsQuery.loading) {
+    //         if (!teamId || !channelId) {
+    //             history.push(`/dashboard/${myTeams[0].id}/${myTeams[0].channels[0].id}`)
+    //         }
+    //     }
+    // }
 
     render() {
         // eslint-disable-next-line
@@ -27,18 +41,14 @@ class DashboardPage extends Component {
         if (myTeamsQueryLoading || currentUserQueryLoading) {
             return null
         }
-
         if (!myTeams.length) {
-            return <Redirect to="/create-team" />
+            return history.push('/createTeam')
         }
 
         const teamIndex = teamId ? findIndex(myTeams, ['id', teamId]) : 0
-        const currentTeam = teamIndex === -1 ? myTeams[0] : myTeams[teamIndex]
-
+        const currentTeam = myTeams[teamIndex]
         const channelIndex = channelId ? findIndex(currentTeam.channels, ['id', channelId]) : 0
-        const currentChannel =
-            channelIndex === -1 ? currentTeam.channels[0] : currentTeam.channels[channelIndex]
-        console.log(this.props)
+        const currentChannel = currentTeam.channels[channelIndex]
         return (
             <AppWrapper>
                 <SideBarContainer

@@ -205,7 +205,8 @@ class SideBarContainer extends Component {
                 key="team-sidebar-component"
                 teams={myTeams.map(team => ({
                     id: team.id,
-                    name: team.name
+                    name: team.name,
+                    channels: team.channels
                 }))}
                 addTeam={this.addTeam}
             />,
@@ -215,6 +216,7 @@ class SideBarContainer extends Component {
                 teamName={currentTeam.name}
                 username={currentUser.userName}
                 channels={currentTeam.channels}
+                directMessageChannels={currentTeam.privateChannels}
                 users={[{ id: 1, name: 'slackbot' }, { id: 2, name: 'Tijmen' }]}
                 toggleAdChannelModal={this.toggleAdChannelModal}
                 toggleAddUsersToTeamModal={this.toggleAddUsersToTeamModal}
