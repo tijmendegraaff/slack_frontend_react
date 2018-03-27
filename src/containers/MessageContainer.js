@@ -101,7 +101,6 @@ class MessageContainer extends Component {
     }
 
     render() {
-        console.log(this.props)
         const { channelName, data: { messages } } = this.props
         const { message, messageError, isSubmitting } = this.state
         if (!messages) {

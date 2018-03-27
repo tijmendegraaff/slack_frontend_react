@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Container, Header, Button, Message, Form } from 'semantic-ui-react'
 import { graphql } from 'react-apollo'
 import PropTypes from 'prop-types'
-import absinthSocketLink from '../absintheSocketLink'
+// import absinthSocketLink from '../absintheSocketLink'
 
 import createSessionMutation from '../graphql/mutations/createSessionMutation'
 
@@ -40,7 +40,7 @@ class LoginPage extends Component {
             })
             .then((res) => {
                 localStorage.setItem('token', res.data.createSession.token)
-                history.push('/dashboard')
+                history.push('/dashboard/')
             })
             .catch((err) => {
                 const { message } = err.graphQLErrors[0]
@@ -52,7 +52,6 @@ class LoginPage extends Component {
     }
 
     render() {
-        // console.log(absinthSocketLink)
         const {
             email, emailError, password, passwordError
         } = this.state
