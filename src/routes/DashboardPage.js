@@ -21,7 +21,7 @@ class DashboardPage extends Component {
         if (teamId) {
             return myTeams[findIndex(myTeams, ['id', teamId])]
         }
-        return 0
+        return myTeams[0]
     }
 
     findCurrentChannel(currentTeam) {
@@ -37,7 +37,7 @@ class DashboardPage extends Component {
             }
             return channel
         }
-        return 0
+        return currentTeam.channels[0]
     }
 
     render() {
