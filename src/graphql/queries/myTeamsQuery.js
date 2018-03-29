@@ -13,6 +13,7 @@ export default gql`
             privateChannels {
                 id
                 name
+                isDirectMessageChannel
                 members {
                     id
                     userName

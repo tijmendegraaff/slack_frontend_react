@@ -101,7 +101,8 @@ class MessageContainer extends Component {
     }
 
     render() {
-        const { channelName, data: { messages } } = this.props
+        console.log(this.props)
+        const { data: { messages }, chatInputPlaceholder } = this.props
         const { message, messageError, isSubmitting } = this.state
         if (!messages) {
             return null
@@ -110,23 +111,23 @@ class MessageContainer extends Component {
             <MessagesWrapper key="message-wrapper" messages={messages} />,
             <SendMessageWrapper
                 key="send-message-input"
-                channelName={channelName}
                 message={message}
                 messageError={messageError}
                 isSubmitting={isSubmitting}
                 onKeyDown={this.onKeyDown}
                 onChange={this.onChange}
                 name="message"
+                chatInputPlaceholder={chatInputPlaceholder}
             />
         ]
     }
 }
 
 MessageContainer.propTypes = {
-    channelName: PropTypes.string.isRequired,
     mutate: PropTypes.func.isRequired,
     data: PropTypes.object.isRequired,
-    channelId: PropTypes.string.isRequired
+    channelId: PropTypes.string.isRequired,
+    chatInputPlaceholder: PropTypes.string.isRequired
 }
 
 export default compose(

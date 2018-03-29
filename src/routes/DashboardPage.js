@@ -13,6 +13,7 @@ class DashboardPage extends Component {
         this.state = {}
         this.findCurrentTeam = this.findCurrentTeam.bind(this)
         this.findCurrentChannel = this.findCurrentChannel.bind(this)
+        this.generatePrivateChannelName = this.generatePrivateChannelName.bind(this)
     }
     // TODO check params to see if channel in params is loaded in cache
 
@@ -40,6 +41,11 @@ class DashboardPage extends Component {
         return currentTeam.channels[0]
     }
 
+    generatePrivateChannelName(currentChannel) {
+        const channelMembers = currentChannel.members.map(member => ` ${member.userName}`)
+        return `${channelMembers}`
+    }
+
     render() {
         // eslint-disable-next-line
         const { history, myTeamsQuery: { myTeams }, currentUserQuery: { currentUser } } = this.props
@@ -62,11 +68,23 @@ class DashboardPage extends Component {
                     history={history}
                     currentUser={currentUser}
                 />
-                {currentChannel && <HeaderWrapper channelName={currentChannel.name} />}
+                {currentChannel && (
+                    <HeaderWrapper
+                        channelName={
+                            currentChannel.isDirectMessageChannel
+                                ? this.generatePrivateChannelName(currentChannel)
+                                : ` ${currentChannel.name}`
+                        }
+                    />
+                )}
                 {currentChannel && (
                     <MessageContainer
                         channelId={currentChannel.id}
-                        channelName={currentChannel.name}
+                        chatInputPlaceholder={
+                            currentChannel.isDirectMessageChannel
+                                ? this.generatePrivateChannelName(currentChannel)
+                                : ` ${currentChannel.name}`
+                        }
                     />
                 )}
             </AppWrapper>
