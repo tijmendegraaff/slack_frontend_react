@@ -91,16 +91,22 @@ class SideBarContainer extends Component {
 
     async handleDirectMessageSubmit() {
         this.setState({ isSubmitting: true })
-        const { currentTeam: { id }, history } = this.props
+        const { currentTeam, history } = this.props
         const { directChannelMembers } = this.state
 
         await this.props
             .createDirectMessageChannelMutation({
                 variables: {
                     input: {
-                        teamId: id,
+                        teamId: currentTeam.id,
                         members: directChannelMembers
                     }
+                },
+                update: (proxy, { data: { createDirectMessageChannel } }) => {
+                    const data = proxy.readQuery({ query: myTeamsQuery })
+                    const currentTeamIndex = findIndex(data.myTeams, ['id', currentTeam.id])
+                    data.myTeams[currentTeamIndex].privateChannels.push(createDirectMessageChannel)
+                    proxy.writeQuery({ query: myTeamsQuery, data })
                 }
             })
             .then((res) => {
@@ -110,7 +116,7 @@ class SideBarContainer extends Component {
                     openAddUsersToDirectChannelModal: false,
                     directChannelMembers: []
                 })
-                history.push(`/dashboard/${id}/${res.data.createDirectMessageChannel.id}`)
+                history.push(`/dashboard/${currentTeam.id}/${res.data.createDirectMessageChannel.id}`)
             })
             .catch((err) => {
                 console.log(err)
