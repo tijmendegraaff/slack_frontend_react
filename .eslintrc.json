@@ -1,0 +1,51 @@
+{
+  "extends": "airbnb",
+  "plugins": ["react", "jsx-a11y", "import", "jest"],
+  "env": {
+    "jest/globals": true
+  },
+  "globals": {
+    "localStorage": true,
+    "document": true,
+    "window": true,
+    "Roles": false,
+    "FS": false,
+    "FlowRouter": false,
+    "Meteor": false,
+    "Tracker": false,
+    "Accounts": false,
+    "Counts": false,
+    "HTTP": false,
+    "Restivus": false,
+    "log": false,
+    "Winston": false,
+    "Winston_Papertrail": false,
+    "ServiceConfiguration": false,
+    "fetch": false,
+    "XMLHttpRequest": false
+  },
+  "rules": {
+    "jsx-a11y/label-has-for": "off",
+    "prefer-destructuring": "off",
+    "comma-dangle": "off",
+    "indent": ["error", 4],
+    "react/jsx-indent": ["error", 4],
+    "react/jsx-indent-props": ["error", 4],
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/forbid-prop-types": "off",
+    "func-style": ["error", "expression"],
+    "semi": ["error", "never"],
+    "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
+    "jsx-a11y/no-static-element-interactions": 0,
+    "class-methods-use-this": 0,
+    "radix": ["error", "as-needed"],
+    "jsx-a11y/anchor-is-valid": [
+      "error",
+      {
+        "components": ["Link"],
+        "specialLink": ["to", "hrefLeft", "hrefRight"],
+        "aspects": ["noHref", "invalidHref", "preferButton"]
+      }
+    ]
+  }
+}

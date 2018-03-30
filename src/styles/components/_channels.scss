@@ -1,0 +1,40 @@
+.channels {
+  grid-column: 2;
+  grid-row: 1 / 4;
+  background-color: $dark-blue;
+}
+
+.channel-title {
+  color: $off-white;
+  font-size: $font-size-large;
+  padding-left: $s-size;
+  padding-top: $m-size;
+}
+
+.channel-username {
+  color: $off-white;
+  font-size: $font-size-small;
+  padding-left: $s-size;
+}
+
+.channel-list {
+  color: darken($off-white, 30%);
+  width: 100%;
+  list-style: none;
+  padding-left: 0px;
+  font-size: $font-size-small;
+}
+
+.channel-list-header {
+  padding: 5px;
+  padding-left: $s-size;
+}
+
+.channel-list-item {
+  padding-left: $m-size;
+  &:hover {
+    background: darken($dark-blue, 2%);
+    cursor: pointer;
+    color: lighten($off-white, 2%);
+  }
+}
