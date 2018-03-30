@@ -55,7 +55,7 @@ class DashboardPage extends Component {
             return null
         }
         if (!myTeams.length) {
-            return history.push('/createTeam')
+            return history.push('/create-team')
         }
 
         const currentTeam = this.findCurrentTeam()

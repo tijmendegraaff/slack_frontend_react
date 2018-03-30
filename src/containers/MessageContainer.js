@@ -14,12 +14,14 @@ class MessageContainer extends Component {
         this.state = {
             message: '',
             messageError: '',
-            isSubmitting: false
+            isSubmitting: false,
+            hasMoreItems: true
         }
         this.onKeyDown = this.onKeyDown.bind(this)
         this.onChange = this.onChange.bind(this)
         this.handleMessageSubmit = this.handleMessageSubmit.bind(this)
         this.subscribeToChannel = this.subscribeToChannel.bind(this)
+        this.fetchMoreMessage = this.fetchMoreMessage.bind(this)
     }
 
     componentDidMount() {
@@ -100,15 +102,48 @@ class MessageContainer extends Component {
         }
     }
 
+    fetchMoreMessage() {
+        const { data: { fetchMore, messages }, channelId } = this.props
+        fetchMore({
+            variables: {
+                input: {
+                    channelId,
+                    cursor: messages[messages.length - 1].insertedAt
+                }
+            },
+            updateQuery: (previousResult, { fetchMoreResult }) => {
+                if (!fetchMoreResult) {
+                    return previousResult
+                }
+
+                if (fetchMoreResult.messages.length < 40) {
+                    this.setState({ hasMoreItems: false })
+                }
+
+                return {
+                    ...previousResult,
+                    messages: [...previousResult.messages, ...fetchMoreResult.messages]
+                }
+            }
+        })
+    }
+
     render() {
-        console.log(this.props)
         const { data: { messages }, chatInputPlaceholder } = this.props
-        const { message, messageError, isSubmitting } = this.state
+        const {
+            message, messageError, isSubmitting, hasMoreItems
+        } = this.state
         if (!messages) {
             return null
         }
         return [
-            <MessagesWrapper key="message-wrapper" messages={messages} />,
+            <MessagesWrapper
+                key="message-wrapper"
+                messages={messages}
+                hasMoreItems={hasMoreItems}
+                fetchMoreMessage={this.fetchMoreMessage}
+                loading={this.props.data.loading}
+            />,
             <SendMessageWrapper
                 key="send-message-input"
                 message={message}
@@ -132,5 +167,10 @@ MessageContainer.propTypes = {
 
 export default compose(
     graphql(createMessageMutation),
-    graphql(messagesQuery, { options: ({ channelId }) => ({ variables: { channelId } }) })
+    graphql(messagesQuery, {
+        options: ({ channelId }) => ({
+            variables: { input: { channelId } },
+            notifyOnNetworkStatusChange: true
+        })
+    })
 )(MessageContainer)

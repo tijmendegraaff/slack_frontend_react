@@ -1,8 +1,8 @@
 import gql from 'graphql-tag'
 
 export default gql`
-    query messages($channelId: ID!) {
-        messages(channelId: $channelId) {
+    query messages($input: MessageQueryInputType!) {
+        messages(input: $input) {
             id
             content
             insertedAt
