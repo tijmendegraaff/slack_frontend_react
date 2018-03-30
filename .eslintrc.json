@@ -1,6 +1,9 @@
 {
   "extends": "airbnb",
-  "plugins": ["react", "jsx-a11y", "import"],
+  "plugins": ["react", "jsx-a11y", "import", "jest"],
+  "env": {
+    "jest/globals": true
+  },
   "globals": {
     "localStorage": true,
     "document": true,
