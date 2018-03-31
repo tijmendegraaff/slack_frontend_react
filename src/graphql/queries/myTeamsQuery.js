@@ -5,6 +5,8 @@ export default gql`
         myTeams {
             id
             name
+            avatar
+            description
             channels {
                 id
                 name
