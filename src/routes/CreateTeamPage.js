@@ -10,7 +10,9 @@ class CreateTeamPage extends Component {
         super(props)
         this.state = {
             teamName: '',
-            createTeamError: ''
+            createTeamError: '',
+            teamDesciption: '',
+            teamDesciptionError: ''
         }
         this.onChange = this.onChange.bind(this)
         this.onSumbit = this.onSumbit.bind(this)
@@ -25,12 +27,13 @@ class CreateTeamPage extends Component {
 
     async onSumbit() {
         this.setState({ createTeamError: '' })
-        const { teamName } = this.state
+        const { teamName, teamDesciption } = this.state
         await this.props
             .mutate({
                 variables: {
                     input: {
-                        name: teamName
+                        name: teamName,
+                        discription: teamDesciption
                     }
                 }
             })
@@ -47,7 +50,9 @@ class CreateTeamPage extends Component {
     }
 
     render() {
-        const { teamName, createTeamError } = this.state
+        const {
+            teamName, createTeamError, teamDesciption, teamDesciptionError
+        } = this.state
         return (
             <Container text>
                 <Form>
@@ -63,6 +68,16 @@ class CreateTeamPage extends Component {
                         />
                     </Form.Field>
                     {createTeamError && <Message size="tiny">{createTeamError}</Message>}
+                    <Form.Field error={!!teamDesciptionError}>
+                        <label>Team Description</label>
+                        <input
+                            placeholder="Team desciption"
+                            name="teamDescription"
+                            onChange={this.onChange}
+                            value={teamDesciption}
+                        />
+                    </Form.Field>
+                    {teamDesciptionError && <Message size="tiny">{teamDesciptionError}</Message>}
                     <Button type="button" onClick={this.onSumbit} size="big">
                         Add Team
                     </Button>
