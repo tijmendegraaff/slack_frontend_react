@@ -5,6 +5,8 @@ export default gql`
         createTeam(input: $input) {
             id
             name
+            avatar
+            description
             channels {
                 id
                 name
