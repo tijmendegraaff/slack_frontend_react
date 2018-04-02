@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { Container, Header, Button, Message, Form } from 'semantic-ui-react'
+import { Container, Header, Button, Message, Form, Grid } from 'semantic-ui-react'
 import { graphql } from 'react-apollo'
+import Dropzone from 'react-dropzone'
 import PropTypes from 'prop-types'
 import createTeamMutation from '../graphql/mutations/createTeamMutation'
 // import myTeamsQuery from '../graphql/queries/myTeamsQuery'
@@ -58,26 +59,46 @@ class CreateTeamPage extends Component {
                 <Form>
                     <br />
                     <Header as="h2">Create a Team</Header> <br />
-                    <Form.Field error={!!createTeamError}>
-                        <label>Team Name</label>
-                        <input
-                            placeholder="teamname"
-                            name="teamName"
-                            onChange={this.onChange}
-                            value={teamName}
-                        />
-                    </Form.Field>
-                    {createTeamError && <Message size="tiny">{createTeamError}</Message>}
-                    <Form.Field error={!!teamDesciptionError}>
-                        <label>Team Description</label>
-                        <input
-                            placeholder="Team desciption"
-                            name="teamDescription"
-                            onChange={this.onChange}
-                            value={teamDesciption}
-                        />
-                    </Form.Field>
-                    {teamDesciptionError && <Message size="tiny">{teamDesciptionError}</Message>}
+                    <Grid divided="vertically">
+                        <Grid.Row columns={2}>
+                            <Grid.Column>
+                                <Form.Field error={!!createTeamError}>
+                                    <label>Team Name</label>
+                                    <input
+                                        placeholder="teamname"
+                                        name="teamName"
+                                        onChange={this.onChange}
+                                        value={teamName}
+                                    />
+                                </Form.Field>
+                                {createTeamError && (
+                                    <Message size="tiny">{createTeamError}</Message>
+                                )}
+                                <Form.Field error={!!teamDesciptionError}>
+                                    <label>Team Description</label>
+                                    <input
+                                        placeholder="Team desciption"
+                                        name="teamDescription"
+                                        onChange={this.onChange}
+                                        value={teamDesciption}
+                                    />
+                                </Form.Field>
+                                {teamDesciptionError && (
+                                    <Message size="tiny">{teamDesciptionError}</Message>
+                                )}
+                            </Grid.Column>
+                            <Grid.Column>
+                                {/* <div className="dropzone"> */}
+                                <Dropzone onDrop={console.log('this is a dropzone')}>
+                                    <p>
+                                        Try dropping some files here, or click to select files to
+                                        upload.
+                                    </p>
+                                </Dropzone>
+                                {/* </div> */}
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
                     <Button type="button" onClick={this.onSumbit} size="big">
                         Add Team
                     </Button>
