@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Container, Header, Button, Message, Form, Grid } from 'semantic-ui-react'
+import { Container, Header, Button, Message, Form, Grid, TextArea } from 'semantic-ui-react'
 import { graphql } from 'react-apollo'
 import Dropzone from 'react-dropzone'
 import PropTypes from 'prop-types'
@@ -52,6 +52,7 @@ class CreateTeamPage extends Component {
     }
 
     render() {
+        console.log(this.state)
         const {
             teamName, createTeamError, teamDesciption, teamDesciptionError
         } = this.state
@@ -65,8 +66,9 @@ class CreateTeamPage extends Component {
                             <Grid.Column>
                                 <Form.Field error={!!createTeamError}>
                                     <label>Team Name</label>
+                                    <br />
                                     <input
-                                        placeholder="teamname"
+                                        placeholder="Teamname"
                                         name="teamName"
                                         onChange={this.onChange}
                                         value={teamName}
@@ -75,15 +77,16 @@ class CreateTeamPage extends Component {
                                 {createTeamError && (
                                     <Message size="tiny">{createTeamError}</Message>
                                 )}
-                                <Form.Field error={!!teamDesciptionError}>
+                                <Form.Field>
                                     <label>Team Description</label>
-                                    <input
-                                        placeholder="Team desciption"
-                                        name="teamDescription"
-                                        onChange={this.onChange}
-                                        value={teamDesciption}
-                                    />
                                 </Form.Field>
+                                <TextArea
+                                    placeholder="Tell us more"
+                                    style={{ minHeight: 100 }}
+                                    value={teamDesciption}
+                                    name="teamDesciption"
+                                    onChange={this.onChange}
+                                />
                                 {teamDesciptionError && (
                                     <Message size="tiny">{teamDesciptionError}</Message>
                                 )}
@@ -102,6 +105,14 @@ class CreateTeamPage extends Component {
                     </Grid>
                     <Button type="button" onClick={this.onSumbit} size="big">
                         Add Team
+                    </Button>
+                    <Button
+                        type="button"
+                        onClick={() => this.props.history.push('/dashboard')}
+                        size="big"
+                        basic
+                    >
+                        Cancel
                     </Button>
                 </Form>
             </Container>
