@@ -4,7 +4,7 @@ import { graphql } from 'react-apollo'
 import Dropzone from 'react-dropzone'
 import PropTypes from 'prop-types'
 import createTeamMutation from '../graphql/mutations/createTeamMutation'
-// import myTeamsQuery from '../graphql/queries/myTeamsQuery'
+import myTeamsQuery from '../graphql/queries/myTeamsQuery'
 
 class CreateTeamPage extends Component {
     constructor(props) {
@@ -13,7 +13,8 @@ class CreateTeamPage extends Component {
             teamName: '',
             createTeamError: '',
             teamDesciption: '',
-            teamDesciptionError: ''
+            teamDesciptionError: '',
+            teamAvatar: null
         }
         this.onChange = this.onChange.bind(this)
         this.onSumbit = this.onSumbit.bind(this)
@@ -88,14 +89,14 @@ class CreateTeamPage extends Component {
                                 )}
                             </Grid.Column>
                             <Grid.Column>
-                                {/* <div className="dropzone"> */}
-                                <Dropzone onDrop={console.log('this is a dropzone')}>
-                                    <p>
-                                        Try dropping some files here, or click to select files to
-                                        upload.
-                                    </p>
-                                </Dropzone>
-                                {/* </div> */}
+                                <div className="dropzone">
+                                    <Dropzone onDrop={console.log('dropzone')}>
+                                        <p>
+                                            Try dropping some files here, or click to select files
+                                            to upload.
+                                        </p>
+                                    </Dropzone>
+                                </div>
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>
